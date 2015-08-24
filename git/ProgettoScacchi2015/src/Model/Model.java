@@ -7,6 +7,7 @@ public interface Model {
 	
 // State information
 	public Piece at(int[] coordinates);
+	//public Configuration getConfiguration();
 	public ChessBoard getChessBoard();
 	
 //change status

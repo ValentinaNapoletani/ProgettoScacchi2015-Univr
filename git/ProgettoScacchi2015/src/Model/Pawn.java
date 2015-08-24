@@ -17,10 +17,10 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public boolean isLegalMove(int[] finalCoord) {
+	public boolean isLegalMove(int[] initialCoord,int[] finalCoord) {
 		
-		int x = getCoordinates()[0];
-		int y = getCoordinates()[1];
+		int x = initialCoord[0];
+		int y = initialCoord[1];
 		
 		//Controllo bordo scacchiera
 		if(finalCoord[0]>7 || finalCoord[0]<0 || finalCoord[1]>7 || finalCoord[1]<0 )

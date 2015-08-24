@@ -9,13 +9,25 @@ import java.awt.Color;
 public class ChessBoard implements Configuration {
 
 	private Piece[][] chessBoardMatrix;
-	int[] coordinates=new int[2];
+	private static Color turn;
 	
 	public ChessBoard(int i) {
 		
 		this.chessBoardMatrix = new Piece[8][8];
-		 
-		initializePieces();
+		
+			initializePieces();
+			turn= Color.white;
+		
+	}
+	
+	public ChessBoard(Color turn, Piece[][] chessBoardMatrix) {
+		
+		this.chessBoardMatrix = new Piece[8][8];
+		
+		for(int y = 0; y < 8; y++)
+			for(int x = 0; x < 8; x++)
+				this.chessBoardMatrix[x][y] = chessBoardMatrix[x][y];
+		
 	}
 	
 	public ChessBoard() {
@@ -23,13 +35,15 @@ public class ChessBoard implements Configuration {
 		this.chessBoardMatrix = new Piece[8][8];
 		
 	}
+
 	
 	public void initializePieces(){
 		
+	    int[] coordinates=new int[2];
 		
 		//pedoni bianchi
 		
-		for(int i = 0; i < 8; i++) {
+		for(int  i = 0; i < 8; i++) {
 			coordinates[0]=i;
 			coordinates[1]=6;
 			chessBoardMatrix[i][6] = new Pawn(Color.white,coordinates,"\u265F");
@@ -42,48 +56,34 @@ public class ChessBoard implements Configuration {
 			chessBoardMatrix[i][1] = new Pawn(Color.black,coordinates,"\u265F");
 		}
 		
-		//altri pezzi bianchi
+		// altri pezzi neri 
 		
-		coordinates[1]=7;
 		coordinates[0]=0;
-		
-		chessBoardMatrix[coordinates[0]][7] = new Rook(Color.white,coordinates,"\u265C");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][7] = new Knight(Color.white,coordinates,"\u265E");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][7] = new Bishop(Color.white,coordinates,"\u265D");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][7] = new Queen(Color.white,coordinates,"\u265B");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][7] = new King(Color.white,coordinates,"\u265A");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][7] = new Bishop(Color.white,coordinates,"\u265D");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][7] = new Knight(Color.white,coordinates,"\u265E");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][7] = new Rook(Color.white,coordinates,"\u265C");
-		
-		//altri pezzi neri
-		
 		coordinates[1]=0;
-		coordinates[0]=0;
 		
-		chessBoardMatrix[coordinates[0]][0] = new Rook(Color.black,coordinates,"\u265C");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][0] = new Knight(Color.black,coordinates,"\u265E");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][0] = new Bishop(Color.black,coordinates,"\u265D");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][0] = new Queen(Color.black,coordinates,"\u265B");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][0] = new King(Color.black,coordinates,"\u265A");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][0] = new Bishop(Color.black,coordinates,"\u265D");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][0] = new Knight(Color.black,coordinates,"\u265E");
-		coordinates[0]++;
-		chessBoardMatrix[coordinates[0]][0] = new Rook(Color.black,coordinates,"\u265C");
-	
+		chessBoardMatrix[coordinates[0]++][0] = new Rook(Color.black,coordinates,"\u265C");
+		chessBoardMatrix[coordinates[0]++][0] = new Knight(Color.black,coordinates,"\u265E");
+		chessBoardMatrix[coordinates[0]++][0] = new Bishop(Color.black,coordinates,"\u265D");
+		chessBoardMatrix[coordinates[0]++][0] = new Queen(Color.black,coordinates,"\u265B");
+		chessBoardMatrix[coordinates[0]++][0] = new King(Color.black,coordinates,"\u265A");
+		chessBoardMatrix[coordinates[0]++][0] = new Bishop(Color.black,coordinates,"\u265D");
+		chessBoardMatrix[coordinates[0]++][0] = new Knight(Color.black,coordinates,"\u265E");
+		chessBoardMatrix[coordinates[0]++][0] = new Rook(Color.black,coordinates,"\u265C");
+		
+		
+		// altri pezzi bianchi 
+		
+		coordinates[0]=0;
+		coordinates[1]=7;
+		
+		chessBoardMatrix[coordinates[0]++][7] = new Rook(Color.white,coordinates,"\u265C");
+		chessBoardMatrix[coordinates[0]++][7] = new Knight(Color.white,coordinates,"\u265E");
+		chessBoardMatrix[coordinates[0]++][7] = new Bishop(Color.white,coordinates,"\u265D");
+		chessBoardMatrix[coordinates[0]++][7] = new Queen(Color.white,coordinates,"\u265B");
+		chessBoardMatrix[coordinates[0]++][7] = new King(Color.white,coordinates,"\u265A");
+		chessBoardMatrix[coordinates[0]++][7] = new Bishop(Color.white,coordinates,"\u265D");
+		chessBoardMatrix[coordinates[0]++][7] = new Knight(Color.white,coordinates,"\u265E");
+		chessBoardMatrix[coordinates[0]][7] = new Rook(Color.white,coordinates,"\u265C");
 	}
 
 	
@@ -98,31 +98,56 @@ public class ChessBoard implements Configuration {
 	public ChessBoard moveAt(int[] initialCoord, int[] finalCoord) {
 		
 		Piece toMove = chessBoardMatrix[initialCoord[0]][initialCoord[1]];
+		ChessBoard result=null;
 		
-		chessBoardMatrix[initialCoord[0]][initialCoord[1]]=null;
+		setTurn();
+		result = new ChessBoard(getTurn(),chessBoardMatrix);
 		
-		chessBoardMatrix[finalCoord[0]][finalCoord[1]]=toMove;
+		result.chessBoardMatrix[initialCoord[0]][initialCoord[1]] = null;
 		
-		//NB:cotrolla il return
-		return null;
+		//this.chessBoardMatrix[initialCoord[0]][initialCoord[1]]=null;
+		
+		//this.chessBoardMatrix[finalCoord[0]][finalCoord[1]]=toMove;
+		
+		//setTurn();
+		result.chessBoardMatrix[finalCoord[0]][finalCoord[1]] = toMove;
+		//return new ChessBoard( getTurn(), chessBoardMatrix );
+		return result;
+		
 	}
 	
 	public boolean equals(Object obj) {
+		
+		int[] coordinates=new int[2];
+		boolean equals=false;
+		
 		if (obj instanceof ChessBoard) 
 			for (int y=0;y<8;y++) {
 				coordinates[1]=y;
 				for (int x=0;x<8;x++) {
 					coordinates[0]=x;
-					if (chessBoardMatrix[x][y]==null ^ ((ChessBoard) obj).at(coordinates)==null )
+					if (chessBoardMatrix[x][y]==null ^ ((ChessBoard) obj).at(coordinates)==null ){
+						equals=false;
 						return false;
-					if(chessBoardMatrix[x][y].equals(((ChessBoard) obj).at(coordinates)))
-						return true;
-					else return false;
+					}
+					
+					if(chessBoardMatrix[x][y]!=null && ((ChessBoard) obj).at(coordinates)!=null && chessBoardMatrix[x][y].equals(((ChessBoard) obj).at(coordinates))) 
+						equals=true;
+					else equals=false;
 				}
 			}
-		return false;	
+		return equals;	
 	}
 	
+	public Color getTurn() {
+		return turn;
+	}
+
 	
+	public void setTurn() {
+		if (getTurn()==Color.white)
+			turn=Color.black;
+		else turn=Color.white;
+	}
 	
 }

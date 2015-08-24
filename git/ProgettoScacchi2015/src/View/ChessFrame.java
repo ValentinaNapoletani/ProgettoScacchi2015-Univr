@@ -9,10 +9,13 @@ import Model.*;
 public class ChessFrame extends JFrame {
 	
 	//private static final long serialVersionUID = 1L;
+	private final HiFrame hiFrame;
 	private final ChessBoardModel model = new ChessBoardModel(new ChessBoard());
 	private final Controller controller;
 
-    public ChessFrame() {
+    public ChessFrame(HiFrame hiFrame) {
+    	
+    	this.hiFrame=hiFrame;
        	
         ChessBoardPanel view=addChessBoard();
     	setTitle("Chess");
@@ -28,6 +31,9 @@ public class ChessFrame extends JFrame {
     	
     	JScrollPane scrollbar=new JScrollPane(layout);
     	add(scrollbar);
+    	
+    	 //chessboard
+        layout.add(addChessBoard(),BorderLayout.CENTER);
 	
     	JPanel northPanel = new JPanel( new GridLayout(1, 2) );
     	layout.add(northPanel,BorderLayout.NORTH);
@@ -46,8 +52,7 @@ public class ChessFrame extends JFrame {
     	layout.add(eastPanel, BorderLayout.EAST);
     	
     	//round
-    	//JLabel roundLabel = new JLabel("Round:" + setRound());
-    	JLabel roundLabel = new JLabel("Round:");
+    	JLabel roundLabel = new JLabel(setLabel());
     	eastPanel.add(roundLabel);
     	
     	//History
@@ -67,22 +72,30 @@ public class ChessFrame extends JFrame {
       //  JScrollPane scrollpane2=new JScrollPane(piecesArea);
         
         eastPanel.add(piecesArea);
-        
-      //chessboard
-        //JPanel chessBoard=new ChessBoardPanel(model,this); 
-        //layout.add(chessBoard,BorderLayout.CENTER);
-        
-       // if (addChessBoard() != null)
-        layout.add(addChessBoard(),BorderLayout.CENTER);
+   
                    	
+    }
+    
+    public String setLabel(){
+    	String result="";
+    	if(model.getChessBoard().getTurn()==Color.white)
+    		result=hiFrame.getWhite() + "it's your turn!";
+    	else if (model.getChessBoard().getTurn()==Color.black)
+    		result=hiFrame.getBlack() + "it's your turn!";
+    	return result;
+    	
     }
     
     private ChessBoardPanel addChessBoard() {
     	
     	ChessBoardPanel chessBoard=new ChessBoardPanel(model,this); 
-		//add(chessBoard, BorderLayout.CENTER);
 		return chessBoard;
 	} 
+    
+    public Controller getController(){
+		return controller;
+	}
+    
         	
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -90,16 +103,17 @@ public class ChessFrame extends JFrame {
             @Override
             public void run() {
                 
-            	JFrame frame = new ChessFrame();
-            	JFrame hiFrame = new HiFrame();
+            	HiFrame hiFrame = new HiFrame();
+            	JFrame frame = new ChessFrame(hiFrame);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.pack();
                 frame.setVisible(true);
-                hiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 hiFrame.pack();
                 hiFrame.setVisible(true);
+              //  frame.setBackground(new Color(255,153,102)); 
       
             }
         });
+        
     }
 }

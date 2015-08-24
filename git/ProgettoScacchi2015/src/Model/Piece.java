@@ -37,6 +37,6 @@ public abstract class Piece {
 		return false;
 	} 
 	
-	public abstract boolean isLegalMove(int[] finalCoord);
+	public abstract boolean isLegalMove(int[] initialCoord,int[] finalCoord);
 	
 }

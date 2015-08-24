@@ -1,6 +1,9 @@
 package View;
 
 import Model.*;
+
+import javax.swing.JButton;
+
 import Controller.*;
 
 public interface View {
@@ -12,7 +15,10 @@ public interface View {
 	//change display
 	void showFinalDialog();
 	void showPromotionDialog();
-	
+	void selectCase(int [] coordinates);
+	void clearCase();
+	void illegalMove(int [] coordinates);
+	 
 	//I've changed
 	void onConfigurationChange();
 
