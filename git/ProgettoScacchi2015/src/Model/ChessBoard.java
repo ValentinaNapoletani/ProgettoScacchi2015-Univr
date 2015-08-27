@@ -1,9 +1,6 @@
 package Model;
 
-//import java.util.ArrayList;
-
-//import View.View;
-import javax.swing.*;
+import View.ChessFrame;
 import java.awt.Color;
 
 public class ChessBoard implements Configuration {
@@ -105,13 +102,8 @@ public class ChessBoard implements Configuration {
 		
 		result.chessBoardMatrix[initialCoord[0]][initialCoord[1]] = null;
 		
-		//this.chessBoardMatrix[initialCoord[0]][initialCoord[1]]=null;
-		
-		//this.chessBoardMatrix[finalCoord[0]][finalCoord[1]]=toMove;
-		
-		//setTurn();
 		result.chessBoardMatrix[finalCoord[0]][finalCoord[1]] = toMove;
-		//return new ChessBoard( getTurn(), chessBoardMatrix );
+		
 		return result;
 		
 	}
@@ -148,6 +140,7 @@ public class ChessBoard implements Configuration {
 		if (getTurn()==Color.white)
 			turn=Color.black;
 		else turn=Color.white;
+		
 	}
 	
 }

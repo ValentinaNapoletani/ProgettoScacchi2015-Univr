@@ -3,19 +3,22 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
+import Controller.*;
 
 
 public class HiFrame extends JFrame {
 	
 	private String whiteGamer;
 	private String blackGamer;
+	private JTextField white;
+	private JTextField black;
 
 	public HiFrame() {
 		setTitle("Wellcome");
-		createLayout();
+		//createLayout();
 	}
 	
-	private void createLayout() {
+	public void createLayout(Controller controller) {
 		
 		JPanel layout = new JPanel(new BorderLayout());
     	add(layout);
@@ -42,8 +45,8 @@ public class HiFrame extends JFrame {
     	
     	whiteKing.setForeground(Color.white);
     	
-    	JTextField white = new JTextField();
-    	JTextField black = new JTextField();
+    	this.white = new JTextField();
+    	this.black = new JTextField();
     	
     	centerPanel.add(whiteKing);
     	centerPanel.add(white);	
@@ -58,15 +61,16 @@ public class HiFrame extends JFrame {
     	
     	JButton start=new JButton("Start");
     	southPanel.add(start);
-    	//start.addActionListener(event -> controller.start());
-  
+    	
+    	start.addActionListener(event -> controller.start());
+    	
 	}
 	
-	public String getWhite(){
-		return whiteGamer;
+	public JTextField getWhite(){
+		return white;
 	}
 	
-	public String getBlack(){
-		return blackGamer;
+	public JTextField getBlack(){
+		return black;
 	}
 }

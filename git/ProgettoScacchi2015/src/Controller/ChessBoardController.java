@@ -3,18 +3,21 @@ package Controller;
 import View.*;
 import Model.*;
 import java.awt.Color;
+import java.awt.Frame;
 
 public class ChessBoardController implements Controller {
 	
 	private final View view;
 	private final Mover mover;
 	private final Model model;
+	private final HiFrame hiFrame;
 	private int [] from = new int[2];
 	private boolean selected=false;
 	
-	public ChessBoardController(View view, Model model){
+	public ChessBoardController(View view, Model model, HiFrame hiFrame){
 		this.view = view;
 		this.model=model;
+		this.hiFrame=hiFrame;
 		this.mover = new Mover(view.getModel(), view, this);
 		view.setController(this);
 	}
@@ -66,7 +69,31 @@ public class ChessBoardController implements Controller {
 	
 	@Override
 	public void setupNewGame() {
+		model.setConfiguration(new ChessBoard());
+		HiFrame frame= new HiFrame();
+		frame.createLayout(this);
+		frame.pack();
+        frame.setVisible(true);
+	}
+	
+	@Override
+	public void history() {
+		
+	}
+	
+	@Override
+	public void jumped() {
+		
+	}
+	
+	@Override
+	public void start() {
+		String whiteGamer = hiFrame.getWhite().getText();
+		String blackGamer = hiFrame.getBlack().getText();
+		view.getFrame().setLabel(whiteGamer,blackGamer);
+		
 		model.setConfiguration(new ChessBoard(1));
+		hiFrame.dispose();
 
 	}
 

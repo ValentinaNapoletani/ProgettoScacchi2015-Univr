@@ -9,5 +9,8 @@ public interface Controller {
 	void onClick(int x, int y);
 	void setupNewGame();
 	void quitGame();
+	void start();
+	void history();
+	void jumped();
 	
 } 

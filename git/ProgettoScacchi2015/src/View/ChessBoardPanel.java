@@ -32,6 +32,10 @@ public class ChessBoardPanel extends JPanel implements View {
 	public Model getModel() {	
 	    return model;
 	}
+	
+	public ChessFrame getFrame(){
+		return frame;
+	}
 
 	public void setController(Controller controller) {
 	    this.controller=controller;
@@ -47,7 +51,8 @@ public class ChessBoardPanel extends JPanel implements View {
 				setButton(chessBoardSquares[x][y]);
 			}
 		}
-		//turno label
+		
+		frame.getRoundLabel().setText(frame.setLabel(frame.getHiFrame().getWhite().getText(), frame.getHiFrame().getBlack().getText()));
 	}
 	
 	public void createChessBoardButtons(){
@@ -79,7 +84,6 @@ public class ChessBoardPanel extends JPanel implements View {
 
 		JButton button=new JButton( model.at(coordinates)==null ? "" : model.at(coordinates).getUnicode());
 		
-		//button.setFont(new Font("Tahoma",Font.BOLD,35));
 		button.setBackground(color);
 		button.addActionListener(event -> frame.getController().onClick(x,y));
 		button.setPreferredSize(new Dimension(65,65));

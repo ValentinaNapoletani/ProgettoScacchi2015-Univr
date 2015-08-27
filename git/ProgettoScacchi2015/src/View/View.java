@@ -9,6 +9,7 @@ import Controller.*;
 public interface View {
 	
 	Model getModel();
+	ChessFrame getFrame();
 	
 	void setController(Controller controller);
 	
