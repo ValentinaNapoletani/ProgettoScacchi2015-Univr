@@ -1,7 +1,7 @@
 package Model;
 
-import View.ChessFrame;
 import java.awt.Color;
+import java.util.ArrayList;
 
 public class ChessBoard implements Configuration {
 
@@ -36,73 +36,66 @@ public class ChessBoard implements Configuration {
 	
 	public void initializePieces(){
 		
-	    int[] coordinates=new int[2];
-		
 		//pedoni bianchi
 		
 		for(int  i = 0; i < 8; i++) {
-			coordinates[0]=i;
-			coordinates[1]=6;
-			chessBoardMatrix[i][6] = new Pawn(Color.white,coordinates,"\u265F");
+			chessBoardMatrix[i][6] = new Pawn(Color.white,new Position(i,6),"\u265F");
+			
 		}
 		
 		//pedoni neri
 		for( int i = 0; i < 8; i++) {
-			coordinates[0]=i;
-			coordinates[1]=1;
-			chessBoardMatrix[i][1] = new Pawn(Color.black,coordinates,"\u265F");
+			chessBoardMatrix[i][1] = new Pawn(Color.black,new Position(i,1),"\u265F");
+			
+			
 		}
 		
 		// altri pezzi neri 
-		
-		coordinates[0]=0;
-		coordinates[1]=0;
-		
-		chessBoardMatrix[coordinates[0]++][0] = new Rook(Color.black,coordinates,"\u265C");
-		chessBoardMatrix[coordinates[0]++][0] = new Knight(Color.black,coordinates,"\u265E");
-		chessBoardMatrix[coordinates[0]++][0] = new Bishop(Color.black,coordinates,"\u265D");
-		chessBoardMatrix[coordinates[0]++][0] = new Queen(Color.black,coordinates,"\u265B");
-		chessBoardMatrix[coordinates[0]++][0] = new King(Color.black,coordinates,"\u265A");
-		chessBoardMatrix[coordinates[0]++][0] = new Bishop(Color.black,coordinates,"\u265D");
-		chessBoardMatrix[coordinates[0]++][0] = new Knight(Color.black,coordinates,"\u265E");
-		chessBoardMatrix[coordinates[0]++][0] = new Rook(Color.black,coordinates,"\u265C");
+		int i=0;
+	
+		chessBoardMatrix[i][0] = new Rook(Color.black,new Position(i,0),"\u265C"); i++;
+		chessBoardMatrix[i][0] = new Knight(Color.black,new Position(i,0),"\u265E");i++;
+		chessBoardMatrix[i][0] = new Bishop(Color.black,new Position(i,0),"\u265D");i++;
+		chessBoardMatrix[i][0] = new Queen(Color.black,new Position(i,0),"\u265B");i++;
+		chessBoardMatrix[i][0] = new King(Color.black,new Position(i,0),"\u265A");i++;
+		chessBoardMatrix[i][0] = new Bishop(Color.black,new Position(i,0),"\u265D");i++;
+		chessBoardMatrix[i][0] = new Knight(Color.black,new Position(i,0),"\u265E");i++;
+		chessBoardMatrix[i][0] = new Rook(Color.black,new Position(i,0),"\u265C");
 		
 		
 		// altri pezzi bianchi 
+		i=0;
 		
-		coordinates[0]=0;
-		coordinates[1]=7;
+		chessBoardMatrix[i][7] = new Rook(Color.white,new Position(i,7),"\u265C");i++;
+		chessBoardMatrix[i][7] = new Knight(Color.white,new Position(i,7),"\u265E");i++;
+		chessBoardMatrix[i][7] = new Bishop(Color.white,new Position(i,7),"\u265D");i++;
+		chessBoardMatrix[i][7] = new Queen(Color.white,new Position(i,7),"\u265B");i++;
+		chessBoardMatrix[i][7] = new King(Color.white,new Position(i,7),"\u265A");i++;
+		chessBoardMatrix[i][7] = new Bishop(Color.white,new Position(i,7),"\u265D");i++;
+		chessBoardMatrix[i][7] = new Knight(Color.white,new Position(i,7),"\u265E");i++;
+		chessBoardMatrix[i][7] = new Rook(Color.white,new Position(i,7),"\u265C");
 		
-		chessBoardMatrix[coordinates[0]++][7] = new Rook(Color.white,coordinates,"\u265C");
-		chessBoardMatrix[coordinates[0]++][7] = new Knight(Color.white,coordinates,"\u265E");
-		chessBoardMatrix[coordinates[0]++][7] = new Bishop(Color.white,coordinates,"\u265D");
-		chessBoardMatrix[coordinates[0]++][7] = new Queen(Color.white,coordinates,"\u265B");
-		chessBoardMatrix[coordinates[0]++][7] = new King(Color.white,coordinates,"\u265A");
-		chessBoardMatrix[coordinates[0]++][7] = new Bishop(Color.white,coordinates,"\u265D");
-		chessBoardMatrix[coordinates[0]++][7] = new Knight(Color.white,coordinates,"\u265E");
-		chessBoardMatrix[coordinates[0]][7] = new Rook(Color.white,coordinates,"\u265C");
 	}
 
-	
 	@Override
-	public Piece at(int[] coordinates) {
-		if (chessBoardMatrix[coordinates[0]][coordinates[1]]!=null)
-		return chessBoardMatrix[coordinates[0]][coordinates[1]];
+	public Piece at(Position coordinates) {
+		if (chessBoardMatrix[coordinates.x][coordinates.y]!=null)
+		return chessBoardMatrix[coordinates.x][coordinates.y];
 		else return null;
 	}
 
 	@Override
-	public ChessBoard moveAt(int[] initialCoord, int[] finalCoord) {
+	public ChessBoard moveAt(Position initialCoord, Position finalCoord) {
 		
-		Piece toMove = chessBoardMatrix[initialCoord[0]][initialCoord[1]];
+		Piece toMove = chessBoardMatrix[initialCoord.x][initialCoord.y];
 		ChessBoard result=null;
 		
 		setTurn();
 		result = new ChessBoard(getTurn(),chessBoardMatrix);
 		
-		result.chessBoardMatrix[initialCoord[0]][initialCoord[1]] = null;
-		
-		result.chessBoardMatrix[finalCoord[0]][finalCoord[1]] = toMove;
+		result.chessBoardMatrix[initialCoord.x][initialCoord.y] = null;	
+		result.chessBoardMatrix[finalCoord.x][finalCoord.y] = toMove;
+		at(initialCoord).setCoordinates(finalCoord);
 		
 		return result;
 		
@@ -110,14 +103,14 @@ public class ChessBoard implements Configuration {
 	
 	public boolean equals(Object obj) {
 		
-		int[] coordinates=new int[2];
+		Position coordinates=new Position();
 		boolean equals=false;
 		
 		if (obj instanceof ChessBoard) 
 			for (int y=0;y<8;y++) {
-				coordinates[1]=y;
+				coordinates.y=y;
 				for (int x=0;x<8;x++) {
-					coordinates[0]=x;
+					coordinates.x=x;
 					if (chessBoardMatrix[x][y]==null ^ ((ChessBoard) obj).at(coordinates)==null ){
 						equals=false;
 						return false;
@@ -143,4 +136,83 @@ public class ChessBoard implements Configuration {
 		
 	}
 	
+	public ArrayList<Piece> getOpponentsPieces() {
+		ArrayList<Piece> Pieces= new ArrayList<> ();
+		for (int y=0; y<8; y++)
+			for (int x=0; x<8; x++)
+				if(chessBoardMatrix[x][y]!=null && chessBoardMatrix[x][y].getColor()!=getTurn() )
+					Pieces.add(chessBoardMatrix[x][y]);	
+		return Pieces;	
+	}
+	
+	public ArrayList<Piece> getMyPieces() {
+		ArrayList<Piece> Pieces= new ArrayList<> ();
+		for (int y=0; y<8; y++)
+			for (int x=0; x<8; x++)
+				if(chessBoardMatrix[x][y]!=null && chessBoardMatrix[x][y].getColor()==getTurn() )
+					Pieces.add(chessBoardMatrix[x][y]);		
+		return Pieces;	
+	}
+	
+	public Position getMyKingCoord(){
+		
+		Position whiteKing= new Position();
+		Position blackKing= new Position();
+		
+		for (int y=0; y<8; y++)
+			for (int x=0; x<8; x++)
+				if(chessBoardMatrix[x][y] instanceof King && chessBoardMatrix[x][y].getColor()==Color.white) {
+					whiteKing.x=x;
+					whiteKing.y=y;
+					if(getTurn()==Color.white)
+						return whiteKing;
+				}
+				else if(chessBoardMatrix[x][y] instanceof King && chessBoardMatrix[x][y].getColor()==Color.black) {
+					blackKing.x=x;
+					blackKing.y=y;
+					if(getTurn()==Color.black)
+						return blackKing;
+				}
+		
+		return getTurn()== Color.white ? whiteKing : blackKing;
+	}
+	
+	public	Position getEnemyKingCoord(){
+		
+		Position whiteKing= new Position();
+		Position blackKing= new Position();
+		
+		for (int y=0; y<8; y++)
+			for (int x=0; x<8; x++)
+				if(chessBoardMatrix[x][y] instanceof King && chessBoardMatrix[x][y].getColor()==Color.white) {
+					whiteKing.x=x;
+					whiteKing.y=y;
+				}
+				else if(chessBoardMatrix[x][y] instanceof King && chessBoardMatrix[x][y].getColor()==Color.black) {
+					blackKing.x=x;
+					blackKing.y=y;
+				}
+		
+		return getTurn()== Color.white ? blackKing : whiteKing;
+	}
+	
+	/*public ArrayList<Position> getSafeCoordinates(Position from){
+		
+		Position pos=new Position();
+		ArrayList<Position> safePos=new ArrayList<>();
+		
+		for(Piece p: getOpponentsPieces())
+			for(int y=(getMyKingCoord().y)-1; y<=(getMyKingCoord().y)+1; y++)
+				for(int x=(getMyKingCoord().x)-1; x<=(getMyKingCoord().x)+1; x++) {
+					if(x>0 && x<8 && y>0 && y<8) {
+						pos.x=x;
+						pos.y=y;
+						if( !(p.getValidPosition(p.getCoordinates()).contains(pos)) && !(safePos.contains(pos)))
+							safePos.add(new Position(x,y));
+						else if((p.getValidPosition(p.getCoordinates()).contains(pos)) && safePos.contains(pos))
+							safePos.remove(pos);
+					}
+				}
+		return safePos;
+	}*/
 }

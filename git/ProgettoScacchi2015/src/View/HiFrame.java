@@ -8,14 +8,14 @@ import Controller.*;
 
 public class HiFrame extends JFrame {
 	
-	private String whiteGamer;
-	private String blackGamer;
 	private JTextField white;
 	private JTextField black;
+	private static final long serialVersionUID=1L;
 
 	public HiFrame() {
 		setTitle("Wellcome");
-		//createLayout();
+		
+		
 	}
 	
 	public void createLayout(Controller controller) {
@@ -26,13 +26,13 @@ public class HiFrame extends JFrame {
     	JPanel northPanel = new JPanel(new GridLayout(2,1));
     	layout.add(northPanel,BorderLayout.NORTH);
     	
-    	JLabel wellcomeLabel = new JLabel("Wellcome");
+    	JLabel wellcomeLabel = new JLabel("    Wellcome");
     	JLabel namesLabel = new JLabel("Insert names:");
     	northPanel.add(    wellcomeLabel);
     	northPanel.add(    namesLabel);
     	
-    	wellcomeLabel.setFont(new Font("Purisa",Font.BOLD,35));
-    	namesLabel.setFont(new Font("Tahoma",Font.ITALIC,15));
+    	wellcomeLabel.setFont(new Font("Purisa",Font.BOLD,40));
+    	namesLabel.setFont(new Font("Tahoma",Font.ITALIC,20));
     	
     	JPanel centerPanel = new JPanel(new GridLayout(2,2));
     	layout.add(centerPanel,BorderLayout.CENTER);
@@ -52,9 +52,6 @@ public class HiFrame extends JFrame {
     	centerPanel.add(white);	
     	centerPanel.add(blackKing);
     	centerPanel.add(black);
-    	
-    	this.whiteGamer=white.getText();
-    	this.blackGamer=black.getText();
     	
     	JPanel southPanel = new JPanel();
     	layout.add(southPanel,BorderLayout.SOUTH);

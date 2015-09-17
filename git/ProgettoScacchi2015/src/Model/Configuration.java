@@ -2,7 +2,7 @@ package Model;
 
 public interface Configuration {
 	
-	public Piece at(int[] coordinates);
-	public ChessBoard moveAt(int[] initialCoord, int[] finalCoord);
+	public Piece at(Position coordinates);
+	public ChessBoard moveAt(Position initialCoord, Position finalCoord);
 	public void initializePieces();
 }

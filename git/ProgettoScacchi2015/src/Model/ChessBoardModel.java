@@ -14,7 +14,7 @@ public class ChessBoardModel implements Model {
 	}
 
 	@Override
-	public Piece at(int[] coordinates) {
+	public Piece at(Position coordinates) {
 		return chessBoard.at(coordinates);
 	}
 

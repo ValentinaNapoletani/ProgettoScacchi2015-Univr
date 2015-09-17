@@ -1,16 +1,15 @@
 package Controller;
 
+import java.awt.event.*;
 import Model.*;
-import View.*;
 
 public interface Controller {
 	
 	//User do something
-	void onClick(int x, int y);
+	void onClick(int x, int y, ActionEvent e);
 	void setupNewGame();
 	void quitGame();
 	void start();
-	void history();
-	void jumped();
+	Position getFrom();
 	
 } 

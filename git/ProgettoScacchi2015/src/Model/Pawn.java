@@ -1,12 +1,13 @@
 package Model;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 public class Pawn extends Piece {
 	
 	private boolean promoted;
 	
-	public Pawn(Color color, int[] coordinates ,String unicode) {
+	public Pawn(Color color, Position coordinates ,String unicode) {
 		super(color,coordinates,unicode);	
 		this.promoted=false;
 	} 
@@ -17,32 +18,48 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public boolean isLegalMove(int[] initialCoord,int[] finalCoord) {
+	public boolean isLegalMove(Position from,Position to) {
 		
-		int x = initialCoord[0];
-		int y = initialCoord[1];
+	//	if(from.y==0 || from.y==7) {
+		//	promoted=true;
+		//	return false;
+		//}
 		
-		//Controllo bordo scacchiera
-		if(finalCoord[0]>7 || finalCoord[0]<0 || finalCoord[1]>7 || finalCoord[1]<0 )
-			return false;
+		return getValidPosition(from).contains(to) ? true : false;	
+	}
+	
+	@Override
+	public ArrayList<Position> getValidPosition(Position initialCoord){
 		
-		if(y==0 || y==7) {
-			promoted=true;
-			return false;
-		}
+		int x=initialCoord.x;
+		int y=initialCoord.y;
+		ArrayList<Position> validPosition = new ArrayList<>();
 		
 		if(getColor()==Color.WHITE) {
-			if (y==6) 
-				return (finalCoord[0]==x+1 && finalCoord[1]==y-1) || (finalCoord[0]==x-1 && finalCoord[1]==y-1)|| (finalCoord[0]==x && (finalCoord[1]==y-1 || finalCoord[1]==y-2));
-			else return (finalCoord[0]==x+1 && finalCoord[1]==y-1) || (finalCoord[0]==x-1 && finalCoord[1]==y-1) || (finalCoord[1]==y-1 && finalCoord[0]==x);
+			validPosition.add(new Position(x-1,y-1));
+			validPosition.add(new Position(x+1,y-1));
+			validPosition.add(new Position(x,y-1));
 			 
-				
-		}		
-		else if (getColor()==Color.BLACK) {
-			if (y==1) //doppio passo iniziale
-				return (finalCoord[0]==x+1 && finalCoord[1]==y+1) || (finalCoord[0]==x-1 && finalCoord[1]==y+1) || (finalCoord[0]==x && (finalCoord[1]==y+1 || finalCoord[1]==y+2));
-			else return (finalCoord[0]==x+1 && finalCoord[1]==y+1) || (finalCoord[0]==x-1 && finalCoord[1]==y+1) || (finalCoord[1]==y+1 && finalCoord[0]==x);
+			if (initialCoord.y==6)
+				validPosition.add(new Position(x,y-2));
 		}
+		else if (getColor()==Color.BLACK) {
+			validPosition.add(new Position(x-1,y+1));
+			validPosition.add(new Position(x+1,y+1));
+			validPosition.add(new Position(x,y+1));
+					
+			if (initialCoord.y==1)
+				validPosition.add(new Position(x,y+2));
+		}
+		
+		return validPosition;
+	}
+	
+	public boolean savingKing(ArrayList<Piece> pieces,Position kingCoord){
+		
+		for (Piece p: pieces)
+			if( p.getValidPosition(p.getCoordinates()).contains(kingCoord))
+				return true;
 		
 		return false;
 	}

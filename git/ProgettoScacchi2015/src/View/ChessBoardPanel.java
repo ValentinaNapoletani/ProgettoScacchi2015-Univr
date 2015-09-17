@@ -2,20 +2,23 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+
 
 import Controller.*;
 import Model.*;
 
 public class ChessBoardPanel extends JPanel implements View {
 	
-	private Controller controller;
+	private static final long serialVersionUID = 1L;
+	private ChessBoardController controller;
 	private final Model model;
 	private final ChessFrame frame;
 	private JButton[][] chessBoardSquares = new JButton[8][8];
+	private JPanel chessBoard=new JPanel(new GridLayout(9, 9));
 	
 	private final Color[] colors = { new Color(240, 230, 140), new Color(101, 67, 33)};
-	
-	int[] coordinates=new int[2];
+	Position coordinates=new Position();
 	
 	public ChessBoardPanel(Model model,ChessFrame frame) {
     	
@@ -37,16 +40,16 @@ public class ChessBoardPanel extends JPanel implements View {
 		return frame;
 	}
 
-	public void setController(Controller controller) {
+	public void setController(ChessBoardController controller) {
 	    this.controller=controller;
 	}
 	
 	
 	public void onConfigurationChange() {
 		for(int y=0;y<8; y++) {
-			coordinates[1]=y;
+			coordinates.y=y;
 			for (int x=0; x<8; x++) {
-				coordinates[0]=x;
+				coordinates.x=x;
 				chessBoardSquares[x][y].setText(model.at(coordinates)==null ? "" : (model.at(coordinates)).getUnicode());
 				setButton(chessBoardSquares[x][y]);
 			}
@@ -58,7 +61,7 @@ public class ChessBoardPanel extends JPanel implements View {
 	public void createChessBoardButtons(){
 
 		final String COLS = "ABCDEFGH";
-		JPanel chessBoard=new JPanel(new GridLayout(9, 9));
+		//JPanel chessBoard=new JPanel(new GridLayout(9, 9));
 		add(chessBoard);
 		
 		chessBoard.add(new JLabel(""));
@@ -67,26 +70,26 @@ public class ChessBoardPanel extends JPanel implements View {
             chessBoard.add( new JLabel("        "+COLS.substring(x, x + 1) + "      "));
 		
 		for(int y=0;y<8; y++) {
-			chessBoard.add(new JLabel("" + (9-(y + 1))));
-			coordinates[1]=y;
+			coordinates.y=y;
+			chessBoard.add(new JLabel("    " + (9-(y + 1))));
     	    for (int x=0; x<8; x++) {
-    	    	coordinates[0]=x;
-    		    chessBoard.add(chessBoardSquares[x][y]=mkButton(x,y,model.at(coordinates),colors[(x+y)%2]));
+    	    	coordinates.x=x;
+    	    	chessBoard.add(chessBoardSquares[x][y]=mkButton(x,y,model.at(coordinates),colors[(x+y)%2]));
     	    }
 		}
 	}
 	
 	public JButton mkButton(int x, int y, Piece at, Color color){
 		
-		coordinates[0]=x;
-    	coordinates[1]=y;
-    	
-
+		coordinates.x=x;
+		coordinates.y=y;
+		
 		JButton button=new JButton( model.at(coordinates)==null ? "" : model.at(coordinates).getUnicode());
 		
 		button.setBackground(color);
-		button.addActionListener(event -> frame.getController().onClick(x,y));
-		button.setPreferredSize(new Dimension(65,65));
+		button.addActionListener(event -> frame.getController().onClick(x,y,event));
+		button.setPreferredSize(new Dimension(59,59));
+		button.setFocusPainted(false);
 		
 	    return button;
 	    
@@ -105,30 +108,52 @@ public class ChessBoardPanel extends JPanel implements View {
 			
 	} 
 	
-	public void showFinalDialog() {
-	//	new finalDialog(frame,controller).setVisible(true); //da passare il vincitore?!
+	public void showFinalDialog(Color color,HiFrame hiFrame) {
+		frame.getRoundLabel().setText("scacco matto");
+		new finalDialog(frame,hiFrame,color).setVisible(true); 
 	}
 	
 	public void showPromotionDialog(){
 	//	new promotionDialog(frame,controller);
 	}
 	
-	public void selectCase(int [] coordinates){
-		chessBoardSquares[coordinates[0]][coordinates[1]].setBackground(Color.blue);
-		/*JButton button=chessBoardSquares[coordinates[0]][coordinates[1]];
-		button.setText(model.at(coordinates)==null ? "" : (model.at(coordinates)).getUnicode());
-		setButton(button); 
-		button.setBackground(Color.blue);
-		button.addActionListener(event -> frame.getController().onClick(coordinates[0],coordinates[1]));
-		button.setPreferredSize(new Dimension(65,65)); */
-	}
-	
-	public void clearCase(){
+	public void selectCase(Object o){
+		JButton button=(JButton) o;
 		
+		//button.setBackground(new Color(254,111,94)); per scacco!!!
+		//button.setBorder(BorderFactory.createLineBorder(new Color(255,0,0,3/4)));
+		button.setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.blue));
+		
+		//chessBoardSquares[coordinates.x][coordinates.y].setBackground(new Color(50,250,48));
+		repaint();	
 	}
 	
-	public void illegalMove(int [] coordinates){
-		chessBoardSquares[coordinates[0]][coordinates[1]].setBackground(Color.red);
+	public void colorOnCheck(Object o){
+		
+		Position position=model.getChessBoard().getEnemyKingCoord();
+		JButton button=chessBoardSquares[position.x][position.y];
+		button.setBackground(new Color(254,111,94));
+		repaint();	
+		frame.getRoundLabel().setText("scacco!!");
+	}
+	
+	public void clearCase(Object o){
+		JButton button=(JButton) o;
+		button.setBorderPainted(false);
+	}
+	
+	public void illegalMove(Object o){
+		JButton button=(JButton) o;
+		button.setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.red));
+		repaint();
+		
+		int delay = 800; //milliseconds
+		ActionListener taskPerformer = new ActionListener() {
+		      public void actionPerformed(ActionEvent evt) {
+		          clearCase(o);
+		      }
+		  };
+		 new Timer(delay, taskPerformer).start();
 	}
 
 

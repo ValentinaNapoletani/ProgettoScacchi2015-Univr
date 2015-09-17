@@ -5,11 +5,14 @@ import javax.swing.*;
 
 import Controller.*;
 import Model.*;
+import java.util.ArrayList;
 
 public class ChessFrame extends JFrame {
 	
-	//private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	private JLabel roundLabel;
+	private TextArea piecesArea;
+	private TextArea piecesArea2;
 	private final HiFrame hiFrame;
 	private final ChessBoardModel model = new ChessBoardModel(new ChessBoard());
 	private final Controller controller;
@@ -21,7 +24,7 @@ public class ChessFrame extends JFrame {
         ChessBoardPanel view=addChessBoard();
     	setTitle("Chess");
     	createLayout();   
-        controller=new ChessBoardController(view,model,hiFrame);
+        controller=new ChessBoardController(view,model,hiFrame,this);
         this.setSize(2000, 2000);
         
 	}
@@ -36,11 +39,6 @@ public class ChessFrame extends JFrame {
     	
     	 //chessboard
         //layout.add(addChessBoard(),BorderLayout.CENTER);
-        
-    	JPanel centerPanel = new JPanel( new FlowLayout() );
-        layout.add(centerPanel, BorderLayout.CENTER);
-        
-        centerPanel.add(addChessBoard());
 	
     	JPanel northPanel = new JPanel( new GridLayout(1, 2) );
     	layout.add(northPanel,BorderLayout.NORTH);
@@ -61,55 +59,92 @@ public class ChessFrame extends JFrame {
     	quit.setBackground(new Color(230,230,250));
     	quit.setForeground(Color.blue);
     	
-    	JPanel eastPanel = new JPanel( new GridLayout(2,2));
-    	layout.add(eastPanel, BorderLayout.EAST);
+    	JPanel centerPanel = new JPanel(new FlowLayout());
+        layout.add(centerPanel, BorderLayout.CENTER);
+        
+        JPanel Panel2 = new JPanel();
+        Panel2.setLayout(new BoxLayout(Panel2, BoxLayout.Y_AXIS));
+    	centerPanel.add(Panel2);
+        
+        centerPanel.add(addChessBoard());
+    	
+        JPanel southPanel = new JPanel( new GridLayout(1,3));
+    	layout.add(southPanel, BorderLayout.SOUTH);
+    		
+    	JLabel jl=new JLabel();
+    	southPanel.add(jl);
     	
     	//round
     	this.roundLabel = new JLabel();
-    	eastPanel.add(roundLabel);
-    	roundLabel.setLocation(600, 100);
-    	roundLabel.setFont(new Font("Purisa",Font.BOLD,20));
+    	southPanel.add(roundLabel);
+    	roundLabel.setFont(new Font("Purisa",Font.BOLD,16));
     	roundLabel.setForeground(Color.blue);
     	
-    	JPanel Panel = new JPanel(new GridLayout(2,2));
+    	JLabel jl2=new JLabel();
+    	southPanel.add(jl2);
+    	
+    	JPanel Panel = new JPanel();
+    	Panel.setLayout(new BoxLayout(Panel, BoxLayout.Y_AXIS));
     	centerPanel.add(Panel);
     	
-    	//History
-    	JLabel history = new JLabel(" History ");
-    	Panel.add(history);
-    	history.setFont(new Font("Purisa",Font.BOLD,15));
-    	history.setForeground(Color.blue);
+    	//white jumped pieces
+    	JLabel whitejumped = new JLabel(" White jumped pieces ");
+    	whitejumped.setAlignmentX(LEFT_ALIGNMENT);;
+    	Panel2.add(whitejumped);
+    	whitejumped.setFont(new Font("Purisa",Font.BOLD,15));
+    	whitejumped.setForeground(Color.blue);
     	
-    	TextArea movesArea=new TextArea("",10,10,TextArea.SCROLLBARS_VERTICAL_ONLY);
-
-        //eastPanel.add(movesArea);
-    	Panel.add(movesArea);
+    	this.piecesArea=new TextArea("",10,1,TextArea.SCROLLBARS_VERTICAL_ONLY);
+    	this.piecesArea.setEditable(false);
+    	this.piecesArea.setFont(new Font("Tahoma",Font.BOLD,40));
+    
+    	Panel2.add(piecesArea);
     	
-        
-        //jumped pieces
-        JLabel jumped = new JLabel(" Jumped pieces ");
-        Panel.add(jumped);
-        jumped.setFont(new Font("Purisa",Font.BOLD,15));
-        jumped.setForeground(Color.blue);
+        //black jumped pieces
+    	JLabel blackjumped = new JLabel(" Black jumped pieces ");
+        Panel.add(blackjumped);
+        blackjumped.setFont(new Font("Purisa",Font.BOLD,15));
+        blackjumped.setForeground(Color.blue);
     	
-    	TextArea piecesArea=new TextArea("",6,10,TextArea.SCROLLBARS_HORIZONTAL_ONLY);
-       
-        //eastPanel.add(piecesArea);
-    	Panel.add(piecesArea);
+    	this.piecesArea2=new TextArea("",10,1,TextArea.SCROLLBARS_VERTICAL_ONLY);
+    	this.piecesArea2.setEditable(false);
+    	this.piecesArea2.setFont(new Font("Tahoma",Font.BOLD,40));
+    	
+    	Panel.add(piecesArea2);
+    
    
   
     } 
 	
-
-    public String setLabel(String white, String black){
+    public String setLabel (String white, String black){
     	String result="";
-    	if(model.getChessBoard().getTurn()==Color.white)
-    		result= white + ", it's your turn!	  ";
+    	if(model.getChessBoard().getTurn()==Color.white)	
+    		result= "            " + white + ", it's your turn!";
     	else if (model.getChessBoard().getTurn()==Color.black)
-    		result=black + ", it's your turn!	  ";
+    		result= "            " + black + ", it's your turn!";
     	return result;
     	
     }
+    
+    public String[] setJumpedPieces(ArrayList<Piece> white, ArrayList<Piece> black){
+    	String result[]= new String[2];
+    	result[0]="";
+    	result[1]="";
+    	for (Piece p: white)
+    		result[0] += p.getUnicode();
+    	for (Piece p: black)
+    		result[1] += p.getUnicode();
+    	return result;
+    }
+    
+    public TextArea getPiecesArea(){
+    	return piecesArea;
+    }
+    
+    public TextArea getPiecesArea2(){
+    	return piecesArea2;
+    }
+    
     
     private ChessBoardPanel addChessBoard() {
     	
@@ -139,14 +174,13 @@ public class ChessFrame extends JFrame {
             	ChessFrame frame = new ChessFrame(hiFrame);
         
             	hiFrame.createLayout(frame.getController());
-            	
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-               // frame.pack();
                 frame.setVisible(true);
-                hiFrame.pack();
-                hiFrame.setVisible(true);
-             
-      
+                hiFrame.setSize(400,300);
+                hiFrame.setAlwaysOnTop(true);
+                hiFrame.setVisible(true);      
+               // new finalDialog(frame,hiFrame,Color.white).setVisible(true);
+                 
             }
         });
         

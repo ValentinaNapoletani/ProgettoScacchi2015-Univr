@@ -1,9 +1,7 @@
 package View;
 
 import Model.*;
-
-import javax.swing.JButton;
-
+import java.awt.Color;
 import Controller.*;
 
 public interface View {
@@ -11,14 +9,15 @@ public interface View {
 	Model getModel();
 	ChessFrame getFrame();
 	
-	void setController(Controller controller);
+	void setController(ChessBoardController controller);
 	
 	//change display
-	void showFinalDialog();
+	void showFinalDialog(Color color,HiFrame hiFrame);
 	void showPromotionDialog();
-	void selectCase(int [] coordinates);
-	void clearCase();
-	void illegalMove(int [] coordinates);
+	void selectCase(Object o);
+	void clearCase(Object o);
+	void illegalMove(Object o);
+	void colorOnCheck(Object o);
 	 
 	//I've changed
 	void onConfigurationChange();

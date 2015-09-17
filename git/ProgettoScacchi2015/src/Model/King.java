@@ -1,27 +1,42 @@
 package Model;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 public class King extends Piece {
 	
-	public King(Color color, int[] coordinates,String unicode) {
+	public King(Color color, Position coordinates,String unicode) {
 		super(color,coordinates,unicode);	
 	} 
 
 	@Override
-	public boolean isLegalMove(int[] initialCoord, int[] finalCoord) {
+	public boolean isLegalMove(Position from, Position to) {
+
+		return getValidPosition(from).contains(to) ? true : false;
+	}
+	
+	@Override
+	public ArrayList<Position> getValidPosition(Position initialCoord){
 		
-		int x = initialCoord[0];
-		int y = initialCoord[1];
+		int x2=initialCoord.x;
+		int y2=initialCoord.y;
+		ArrayList<Position> validPosition = new ArrayList<>();
 		
-		//Controllo bordo scacchiera
-				if(finalCoord[0]>7 || finalCoord[0]<0 || finalCoord[1]>7 || finalCoord[1]<0 )
-					return false;
-				
-		return (finalCoord[0]==x+1 && finalCoord[1]==y+1)|| (finalCoord[0]==x-1 && finalCoord[1]==y-1) || 
-			   (finalCoord[0]==x+1 && finalCoord[1]==y-1) || (finalCoord[0]==x-1 && finalCoord[1]==y-1) ||
-			    (finalCoord[0]==x && finalCoord[1]==y-1) || (finalCoord[0]==x && finalCoord[1]==y+1) ||
-			    (finalCoord[0]==x+1 && finalCoord[1]==y) || (finalCoord[0]==x-1 && finalCoord[1]==y);
+		for (int y=y2-1;y<=y2+1;y++)
+			for(int x=x2-1;x<=x2+1;x++)
+				if(x>=0 && x<8 && y>=0 && y<8){
+					validPosition.add(new Position(x,y));
+		}
+	
+		return validPosition;
+	}
+	
+	public boolean savingKing(ArrayList<Piece> pieces,Position kingCoord){
+		
+		for (Piece p: pieces)
+			if( p.getValidPosition(p.getCoordinates()).contains(kingCoord))
+				return true;
+		return false;
 	}
 
 }
