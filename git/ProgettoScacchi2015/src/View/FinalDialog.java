@@ -31,17 +31,17 @@ public class FinalDialog extends JDialog {
 		panel.add(panel1);
 		JLabel label=new JLabel();
 		panel1.add(label);
-		panel1.setBackground(new Color(153,203,255));
+		panel1.setBackground(new Color(255, 253, 208));
 		
 		label.setText("<html>The winner is <br>  " + name + "!!!</h2></html>");		
 		label.setFont(new Font("Purisa",Font.ITALIC,30));
-		label.setForeground(Color.red);
+		label.setForeground(new Color(255, 117, 24));
 
 		JPanel panel2=new JPanel();
 		panel.add(panel2);
 		JLabel label2=new JLabel();
 		panel2.add(label2);
-		panel2.setBackground(new Color(153,203,255));
+		panel2.setBackground(new Color(255, 253, 208));
 		
 		label2.setText("\u265A");
 		label2.setFont(new Font("Tahoma",Font.BOLD,100));

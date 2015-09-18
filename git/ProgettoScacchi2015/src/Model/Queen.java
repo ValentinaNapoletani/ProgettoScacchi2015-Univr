@@ -81,11 +81,4 @@ public class Queen extends Piece {
 		return validPosition;
 	}
 	
-	public boolean savingKing(ArrayList<Piece> pieces,Position kingCoord){
-		
-		for (Piece p: pieces)
-			if( p.getValidPosition(p.getCoordinates()).contains(kingCoord))
-				return true;
-		return false;
-	}
 }

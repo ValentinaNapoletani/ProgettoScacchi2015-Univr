@@ -34,42 +34,42 @@ public class ChessFrame extends JFrame {
     	JPanel layout = new JPanel(new BorderLayout());
     	add(layout);
     	
-    	//JScrollPane scrollbar=new JScrollPane(layout);
-    	//add(scrollbar);
-    	
-    	 //chessboard
-        //layout.add(addChessBoard(),BorderLayout.CENTER);
-	
     	JPanel northPanel = new JPanel( new GridLayout(1, 2) );
     	layout.add(northPanel,BorderLayout.NORTH);
+    	northPanel.setBackground(new Color(255, 229, 180));
     	
     	//new game
     	JButton newGame=new JButton("New Game");
     	northPanel.add(newGame);
     	newGame.addActionListener(event -> controller.setupNewGame());
     	newGame.setFont(new Font("Purisa",Font.BOLD,15));
-    	newGame.setBackground(new Color(230, 230, 250));
-    	newGame.setForeground(Color.blue);
+    	newGame.setBackground(new Color(255, 253, 208));
+    	newGame.setForeground(new Color(255, 117, 24));
+    	newGame.setBorder(BorderFactory.createMatteBorder(2,2,2,2,new Color(255, 117, 24)));
     	
     	//quit
     	JButton quit=new JButton("Quit");
     	northPanel.add(quit);
     	quit.addActionListener(event -> controller.quitGame());
     	quit.setFont(new Font("Purisa",Font.BOLD,15));
-    	quit.setBackground(new Color(230,230,250));
-    	quit.setForeground(Color.blue);
+    	quit.setBackground(new Color(255, 253, 208));
+    	quit.setForeground(new Color(255, 117, 24));
+    	quit.setBorder(BorderFactory.createMatteBorder(2,2,2,2,new Color(255, 117, 24)));
     	
     	JPanel centerPanel = new JPanel(new FlowLayout());
         layout.add(centerPanel, BorderLayout.CENTER);
+        centerPanel.setBackground(new Color(255, 229, 180));
         
         JPanel Panel2 = new JPanel();
         Panel2.setLayout(new BoxLayout(Panel2, BoxLayout.Y_AXIS));
-    	centerPanel.add(Panel2);
+        Panel2.setBackground(new Color(255, 229, 180));
+        centerPanel.add(Panel2);
         
         centerPanel.add(addChessBoard());
     	
         JPanel southPanel = new JPanel( new GridLayout(1,3));
     	layout.add(southPanel, BorderLayout.SOUTH);
+    	southPanel.setBackground(new Color(255, 229, 180));
     		
     	JLabel jl=new JLabel();
     	southPanel.add(jl);
@@ -78,13 +78,14 @@ public class ChessFrame extends JFrame {
     	this.roundLabel = new JLabel();
     	southPanel.add(roundLabel);
     	roundLabel.setFont(new Font("Purisa",Font.BOLD,16));
-    	roundLabel.setForeground(Color.blue);
+    	roundLabel.setForeground(new Color(255, 117, 24));
     	
     	JLabel jl2=new JLabel();
     	southPanel.add(jl2);
     	
     	JPanel Panel = new JPanel();
     	Panel.setLayout(new BoxLayout(Panel, BoxLayout.Y_AXIS));
+    	Panel.setBackground(new Color(255, 229, 180));
     	centerPanel.add(Panel);
     	
     	//white jumped pieces
@@ -92,11 +93,13 @@ public class ChessFrame extends JFrame {
     	whitejumped.setAlignmentX(LEFT_ALIGNMENT);;
     	Panel2.add(whitejumped);
     	whitejumped.setFont(new Font("Purisa",Font.BOLD,15));
-    	whitejumped.setForeground(Color.blue);
+    	whitejumped.setForeground(new Color(255, 117, 24));
     	
-    	this.piecesArea=new TextArea("",10,1,TextArea.SCROLLBARS_VERTICAL_ONLY);
+    	this.piecesArea=new TextArea("",10,1,TextArea.SCROLLBARS_NONE);
     	this.piecesArea.setEditable(false);
     	this.piecesArea.setFont(new Font("Tahoma",Font.BOLD,40));
+    	this.piecesArea.setBackground(Color.ORANGE);
+
     
     	Panel2.add(piecesArea);
     	
@@ -104,16 +107,16 @@ public class ChessFrame extends JFrame {
     	JLabel blackjumped = new JLabel(" Black jumped pieces ");
         Panel.add(blackjumped);
         blackjumped.setFont(new Font("Purisa",Font.BOLD,15));
-        blackjumped.setForeground(Color.blue);
+        blackjumped.setForeground(new Color(255, 117, 24));
     	
-    	this.piecesArea2=new TextArea("",10,1,TextArea.SCROLLBARS_VERTICAL_ONLY);
+    	this.piecesArea2=new TextArea("",10,1,TextArea.SCROLLBARS_NONE);
     	this.piecesArea2.setEditable(false);
     	this.piecesArea2.setFont(new Font("Tahoma",Font.BOLD,40));
+    	this.piecesArea2.setBackground(Color.ORANGE);
     	
     	Panel.add(piecesArea2);
     
    
-  
     } 
 	
     public String setLabel (String white, String black){
@@ -149,6 +152,7 @@ public class ChessFrame extends JFrame {
     private ChessBoardPanel addChessBoard() {
     	
     	ChessBoardPanel chessBoard=new ChessBoardPanel(model,this); 
+    	chessBoard.setBackground(new Color(255, 229, 180));
 		return chessBoard;
 	} 
     
@@ -172,15 +176,22 @@ public class ChessFrame extends JFrame {
                 
             	HiFrame hiFrame = new HiFrame();
             	ChessFrame frame = new ChessFrame(hiFrame);
+            	//ArrayList<Piece> p=new ArrayList<>();
+            	//ArrayList<Piece> p2=new ArrayList<>();
+            	
+            	/*p.add(new Rook(Color.white,new Position(2,7),"\u265C"));
+        		p.add(new Knight(Color.white,new Position(5,7),"\u265E"));
+        		p.add(new Bishop(Color.white,new Position(1,7),"\u265D"));
+        		p.add(new Queen(Color.white,new Position(4,7),"\u265B"));*/
         
             	hiFrame.createLayout(frame.getController());
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setVisible(true);
                 hiFrame.setSize(400,300);
                 hiFrame.setAlwaysOnTop(true);
-                hiFrame.setVisible(true);      
-               // new finalDialog(frame,hiFrame,Color.white).setVisible(true);
-                 
+                hiFrame.setVisible(true); 
+               // new PromotionDialog(frame,p,p2,Color.black,frame.controller,new Position(0,5)).setVisible(true);;
+                             
             }
         });
         

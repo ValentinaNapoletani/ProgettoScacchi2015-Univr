@@ -13,12 +13,12 @@ public interface View {
 	
 	//change display
 	void showFinalDialog(Color color,HiFrame hiFrame);
-	void showPromotionDialog();
+	void showPromotionDialog(Position p);
 	void selectCase(Object o);
 	void clearCase(Object o);
 	void illegalMove(Object o);
-	void colorOnCheck(Object o);
-	 
+	void colorOnCheck(Position p);
+	
 	//I've changed
 	void onConfigurationChange();
 

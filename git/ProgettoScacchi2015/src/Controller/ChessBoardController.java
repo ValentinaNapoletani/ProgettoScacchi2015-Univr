@@ -29,7 +29,7 @@ public class ChessBoardController implements Controller {
 		this.hiFrame=hiFrame;
 		this.frame=frame;
 		this.controller=new CheckMateController(model);
-		this.mover = new Mover(view.getModel(),this, controller);
+		this.mover = new Mover(view.getModel(),view,this, controller);
 		view.setController(this);
 	}
 	
@@ -57,46 +57,40 @@ public class ChessBoardController implements Controller {
 		else if (selected && ((from.x==x && from.y!=y) || (from.x!=x && from.y==y) || (from.x!=x && from.y!=y))) {
 			view.clearCase(startButton);
 			this.selected=false;
+			
 			if ( model.at(from).isLegalMove(from,coordinates) && controller.checkMoves(from,coordinates)) {
+						
 				coordinates.x=x;
 				coordinates.y=y;
-				mover.moveAt(coordinates);
+				mover.moveAt(coordinates,e.getSource());
 		
 				selected=false;
-				from.x=10;
-				from.y=10;
-				//view.clearCase(startButton);
-				
-				//if(frame.getRoundLabel().getText()=="scacco!!")
-				//	frame.getRoundLabel().setText(frame.setLabel(frame.getHiFrame().getWhite().getText(), frame.getHiFrame().getBlack().getText()));
 				
 				frame.getPiecesArea().setText(frame.setJumpedPieces(whitejumped,blackjumped)[0]);
 				frame.getPiecesArea().setForeground(Color.white); 
 				
 				frame.getPiecesArea2().setText(frame.setJumpedPieces(whitejumped,blackjumped)[1]);
 				
-				if(controller.isCheck(model.getChessBoard().getMyKingCoord())!=null){
+				Piece enemy=controller.isCheck(model.getChessBoard().getMyKingCoord());
+				if(enemy!=null){
 					view.colorOnCheck(model.getChessBoard().getMyKingCoord());
-					if(mover.therIsAWinner()!=null)
-						view.showFinalDialog(mover.therIsAWinner(),hiFrame);
+					if(mover.therIsAWinner(enemy)!=null)
+						view.showFinalDialog(mover.therIsAWinner(enemy),hiFrame);
 				}
 				else if(controller.isCheck(model.getChessBoard().getMyKingCoord())==null &&
-						frame.getRoundLabel().getText()=="scacco!!")
+						frame.getRoundLabel().getText()=="Check!!")
 						frame.getRoundLabel().setText(frame.setLabel(frame.getHiFrame().getWhite().getText(), frame.getHiFrame().getBlack().getText()));
 					
 			}
 			else  view.illegalMove(e.getSource()); //implement view
+			
+			if (model.at(coordinates) instanceof Pawn && 
+					   ((y==0 && model.at(coordinates).getColor()==Color.white) || (y==7 && model.at(coordinates).getColor()==Color.black))) {
+						view.showPromotionDialog(coordinates); 
+					} 
 		}
-		//else view.illegalMove();
-					
-		//if(mover.therIsAWinner()!=null)
-		//	view.showFinalDialog(mover.therIsAWinner(),hiFrame);
-
-	/*	if (model.at(coordinates) instanceof Pawn && 
-		   (y==0 && model.at(coordinates).getColor()==Color.white) || (y==7 && model.at(coordinates).getColor()==Color.black)) {
-			view.showPromotionDialog(); //implement view
-		} */
-		
+		else view.illegalMove(e.getSource());
+	
 	}
 	
 	public Position getFrom(){
@@ -135,6 +129,12 @@ public class ChessBoardController implements Controller {
 	@Override
 	public void quitGame() {
 		System.exit(0);
+	}
+	
+	@Override
+	public void promotion(Position pos,Piece piece){	
+		model.pieceSwap(pos,piece);
+		
 	}
 
 }

@@ -196,23 +196,8 @@ public class ChessBoard implements Configuration {
 		return getTurn()== Color.white ? blackKing : whiteKing;
 	}
 	
-	/*public ArrayList<Position> getSafeCoordinates(Position from){
+	public void pieceSwap(Position pos,Piece piece){
 		
-		Position pos=new Position();
-		ArrayList<Position> safePos=new ArrayList<>();
-		
-		for(Piece p: getOpponentsPieces())
-			for(int y=(getMyKingCoord().y)-1; y<=(getMyKingCoord().y)+1; y++)
-				for(int x=(getMyKingCoord().x)-1; x<=(getMyKingCoord().x)+1; x++) {
-					if(x>0 && x<8 && y>0 && y<8) {
-						pos.x=x;
-						pos.y=y;
-						if( !(p.getValidPosition(p.getCoordinates()).contains(pos)) && !(safePos.contains(pos)))
-							safePos.add(new Position(x,y));
-						else if((p.getValidPosition(p.getCoordinates()).contains(pos)) && safePos.contains(pos))
-							safePos.remove(pos);
-					}
-				}
-		return safePos;
-	}*/
+		chessBoardMatrix[pos.x][pos.y]=piece;
+	}
 }

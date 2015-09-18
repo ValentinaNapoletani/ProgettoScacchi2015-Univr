@@ -2,22 +2,25 @@ package Controller;
 
 import Model.*;
 import java.awt.Color;
+import View.*;
 
 public class Mover {
 	
 	private Model model;
+	private View view;
 	private final ChessBoardController controller;
 	private final CheckMateController controller2;
 	
-	public Mover(Model model,ChessBoardController controller, CheckMateController controller2) {
+	public Mover(Model model,View view,ChessBoardController controller, CheckMateController controller2) {
 		
 		this.model=model;
+		this.view=view;
 		this.controller=controller;
 		this.controller2=controller2;
 		
 	}
 	
-	public void moveAt(Position coordinates){
+	public void moveAt(Position coordinates,Object o){
 		 if (isLegalMove(coordinates) ) {	 
 			 if ( model.at(coordinates) != null && !(model.at(coordinates) instanceof King) ) {
 					if( model.at(coordinates).getColor()== Color.white)
@@ -28,7 +31,7 @@ public class Mover {
 			 model.setConfiguration(model.getChessBoard().moveAt(controller.getFrom(),coordinates));
 			 
 		 }
-		// else view.illegalMove(coordinates); 
+		 else view.illegalMove(o);
 			 
 	}
 	
@@ -58,12 +61,12 @@ public class Mover {
 	}
 	
 	//verifica se c'e un vincitore e ne ritorna il colore
-	public Color therIsAWinner(){
+	public Color therIsAWinner(Piece enemy){
 		
 		Color loser=model.getChessBoard().getTurn();
 		Color winner;
 		
-		if(controller2.isCheckMate()){
+		if(controller2.isCheckMate(enemy)){
 			if (loser==Color.white)
 			winner=Color.black;
 			else winner=Color.white;

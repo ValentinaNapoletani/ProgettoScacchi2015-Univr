@@ -24,7 +24,7 @@ public class Bishop extends Piece {
 		ArrayList<Position> validPosition = new ArrayList<>();
 		
 		//alto dx
-		while(x2<8 && y2>0)
+		while(x2<8 && y2>=0)
 			if(x2!=initialCoord.x && y2!=initialCoord.y)
 				validPosition.add(new Position(x2++,y2--));
 			else {
@@ -35,7 +35,7 @@ public class Bishop extends Piece {
 		//alto sx
 		x2=initialCoord.x;
 		y2=initialCoord.y;
-		while(x2>0 && y2>0)
+		while(x2>=0 && y2>=0)
 			if(x2!=initialCoord.x && y2!=initialCoord.y)
 				validPosition.add(new Position(x2--,y2--));
 			else {
@@ -46,7 +46,7 @@ public class Bishop extends Piece {
 		//basso sx
 		x2=initialCoord.x;
 		y2=initialCoord.y;
-		while(x2>0 && y2<8)
+		while(x2>=0 && y2<8)
 			if(x2!=initialCoord.x && y2!=initialCoord.y)
 				validPosition.add(new Position(x2--,y2++));
 			else {
@@ -68,11 +68,4 @@ public class Bishop extends Piece {
 		return validPosition;
 	}
 	
-	public boolean savingKing(ArrayList<Piece> pieces,Position kingCoord){
-		
-		for (Piece p: pieces)
-			if( p.getValidPosition(p.getCoordinates()).contains(kingCoord))
-				return true;
-		return false;
-	}
 }

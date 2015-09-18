@@ -1,7 +1,8 @@
 package Controller;
 
 import java.awt.event.*;
-import Model.*;
+import Model.Position;
+import Model.Piece;
 
 public interface Controller {
 	
@@ -10,6 +11,6 @@ public interface Controller {
 	void setupNewGame();
 	void quitGame();
 	void start();
-	Position getFrom();
+	void promotion(Position pos,Piece piece);
 	
 } 

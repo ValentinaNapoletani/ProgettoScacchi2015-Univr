@@ -1,7 +1,6 @@
 package Controller;
 
 import Model.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 public class CheckMateController {
@@ -19,31 +18,33 @@ public class CheckMateController {
 		
 		boolean b=true;
 		Piece enemy=isCheck(model.getChessBoard().getMyKingCoord());
-		
-		if(model.at(new Position(1,4)) instanceof Bishop)
-			isCheck(model.getChessBoard().getMyKingCoord());
+		ArrayList<Position> path;
 		
 		//se non sono in scacco devo stare al sicuro
 		if(enemy==null) {
 			//se sono un re non posso mettermi in scacco
 			if (model.at(from) instanceof King) 
-				return (!(isCheck(to,from)));
+				return isCheck(to)!=null ? false :true;
 						
 			//se non sono un re non posso scoprirlo
-			if (!(model.at(from) instanceof King) && model.at(from).getCoordinates().x==1) {
+			if (!(model.at(from) instanceof King)) {
 				//se solo questo pezzo salva il re, non può muoversi fuori dalla linea di tiro del nemico
 				Piece p= savingKing(model.getChessBoard().getOpponentsPieces(),model.getChessBoard().getMyKingCoord(), model.at(from));
-				if ( p!=null )
+				if(p!=null) {
+					for(Position pos: (path=getCoordFromEnemyToKing(p,model.getChessBoard().getMyKingCoord())))
+						if ( model.at(pos)!=null && !(model.at(pos).equals(model.at(from))) )
+							return true;
 					//se muovendomi continuo a salvare il re, ok!
-					return p.getValidPosition(p.getCoordinates()).contains(to) || 
-							(to.x==p.getCoordinates().x && to.y==p.getCoordinates().y) ? true : false;		
+					return path.contains(to) || 
+						(to.x==p.getCoordinates().x && to.y==p.getCoordinates().y) ? true : false;	
+				}
 			}
 		}
 		//se sono in scacco posso solo togliermi dallo scacco
 		else if(enemy!=null) {
 			 
 			 //se voglio mangiare chi mi mette sotto scacco, mettermi tra re e nemico o spostarmi in posizione salva,ok!
-			 if( to.equals(enemy.getCoordinates()) || getSafeCoordinates(from).contains(to) || !(model.at(from) instanceof King) && getCoordFromEnemyToKing(enemy,model.getChessBoard().getMyKingCoord()).contains(to))
+			 if( to.equals(enemy.getCoordinates()) || model.at(from) instanceof King && getSafeCoordinates(enemy).contains(to) || !(model.at(from) instanceof King) && getCoordFromEnemyToKing(enemy,model.getChessBoard().getMyKingCoord()).contains(to))
 				return true;
 			 else return false; 
 		 }
@@ -52,20 +53,17 @@ public class CheckMateController {
 	return b;
 	}
 		
-	//lista di pezzi che salvano il re
-	public ArrayList<Piece> getGoodPieces(){
+	//lista di pezzi che possono salvare il re se è in scacco
+	public ArrayList<Piece> getGoodPieces(Piece enemy){
 		
-		Position coordinates=new Position();
 		ArrayList<Piece> goodPieces=new ArrayList<>();
 		
-		for(int y=0; y<8 ; y++)
-			for(int x=0; x<8 ; x++) {
-				coordinates.x=x;
-				coordinates.y=y;
-				if(model.at(coordinates)!=null && model.at(coordinates).getColor()==model.getChessBoard().getTurn())
-					if(savingKing(model.getChessBoard().getOpponentsPieces(),model.getChessBoard().getMyKingCoord(), model.at(coordinates))!=null )
-						goodPieces.add(model.at(coordinates));
-			}
+		for(Piece p :model.getChessBoard().getMyPieces())
+			if(!(p instanceof King))
+				if(p instanceof Pawn && p.getCoordinates().x!=enemy.getCoordinates().x)
+					for( Position pos: p.getValidPosition(p.getCoordinates()))
+						if(getCoordFromEnemyToKing(enemy, model.getChessBoard().getMyKingCoord()).contains(pos))
+							goodPieces.add(p);
 		
 		return goodPieces;
 	}
@@ -75,9 +73,8 @@ public class CheckMateController {
 		
 		for (Piece p: pieces)
 			if( p.getValidPosition(p.getCoordinates()).contains(kingCoord))
-				if(getCoordFromEnemyToKing(p,kingCoord)!=null && getCoordFromEnemyToKing(p,kingCoord).contains(goodPiece.getCoordinates())){
-					System.out.println("sono" + goodPiece.getUnicode() + goodPiece.getColor() +" e salvo il re da " + p.getUnicode() + p.getColor());
-					return p;}
+				if(getCoordFromEnemyToKing(p,kingCoord)!=null && getCoordFromEnemyToKing(p,kingCoord).contains(goodPiece.getCoordinates()))
+					return p;
 		
 		return null;
 	}
@@ -117,7 +114,7 @@ public class CheckMateController {
 		return path;
 	}
 	
-	public boolean isCheck(Position kingCoord,Position from){
+	/*public boolean isCheck(Position kingCoord,Position from){
 		
 		boolean b=false;
 		
@@ -148,11 +145,12 @@ public class CheckMateController {
 							return b;
 					}
 		return b;
-	}
+	}*/
 	
 	public Piece isCheck(Position kingCoord){
 		
-		for (Piece p: model.getChessBoard().getTurn()==model.at(kingCoord).getColor() ? model.getChessBoard().getOpponentsPieces() : model.getChessBoard().getMyPieces())
+		
+		for (Piece p: model.getChessBoard().getOpponentsPieces())
 				if(p.getValidPosition(p.getCoordinates()).contains(kingCoord)) 
 					if (p instanceof Knight) {
 						enemy=p;
@@ -181,30 +179,24 @@ public class CheckMateController {
 		return enemy;
 	}
 	
-	public ArrayList<Position> getSafeCoordinates(Position from){
+	public ArrayList<Position> getSafeCoordinates(Piece enemy){
 		
 		ArrayList<Position> safePos=new ArrayList<>();
 		Position king=model.getChessBoard().getMyKingCoord();
 		
 		for( Position p: model.at(king).getValidPosition(king)) 
 			if(p.x<8 && p.x>=0 && p.y<8 && p.y>=0)
-				if ( !(isCheck(p,from)) && !(safePos.contains(p)) )
-					if(model.at(p)==null)
+				if ( isCheck(p)==null )
+					if(model.at(p)==null || model.at(p).equals(enemy))
 						safePos.add(new Position(p.x,p.y));
-				else if( isCheck(p,from) && safePos.contains(p))
-				safePos.remove(p);
 		
-		for(int i=0;i<safePos.size();i++)
-			System.out.println("x:" + safePos.get(i).getX()+ "y:" + safePos.get(i).getY());
 		return safePos;
 	}
 	
 	
-	public boolean isCheckMate(){
-		
-		Position king=model.getChessBoard().getMyKingCoord();
-		
-		if( getSafeCoordinates(king).isEmpty() && getGoodPieces().isEmpty()){
+	public boolean isCheckMate(Piece enemy){
+	
+		if( getSafeCoordinates(enemy).isEmpty() && getGoodPieces(enemy).isEmpty()){
 	
 			return true;
 			}

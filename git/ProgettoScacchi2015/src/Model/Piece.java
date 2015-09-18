@@ -50,6 +50,5 @@ public abstract class Piece {
 	
 	public abstract boolean isLegalMove(Position from,Position to);
 	public abstract ArrayList<Position> getValidPosition(Position initialCoord);
-	public abstract boolean savingKing(ArrayList<Piece> pieces,Position kingCoord);
 	
 }

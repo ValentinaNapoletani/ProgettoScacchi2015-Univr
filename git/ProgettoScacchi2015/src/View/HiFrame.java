@@ -25,6 +25,7 @@ public class HiFrame extends JFrame {
     	
     	JPanel northPanel = new JPanel(new GridLayout(2,1));
     	layout.add(northPanel,BorderLayout.NORTH);
+    	northPanel.setBackground(new Color(255, 229, 180));
     	
     	JLabel wellcomeLabel = new JLabel("    Wellcome");
     	JLabel namesLabel = new JLabel("Insert names:");
@@ -32,10 +33,13 @@ public class HiFrame extends JFrame {
     	northPanel.add(    namesLabel);
     	
     	wellcomeLabel.setFont(new Font("Purisa",Font.BOLD,40));
-    	namesLabel.setFont(new Font("Tahoma",Font.ITALIC,20));
+    	namesLabel.setFont(new Font("Purisa",Font.BOLD,20));
+    	wellcomeLabel.setForeground(new Color(255, 117, 24));
+    	namesLabel.setForeground(new Color(255, 117, 24));
     	
     	JPanel centerPanel = new JPanel(new GridLayout(2,2));
     	layout.add(centerPanel,BorderLayout.CENTER);
+    	centerPanel.setBackground(new Color(255, 229, 180));
     	
     	JLabel whiteKing = new JLabel("\u265A", JLabel.RIGHT);
     	JLabel blackKing = new JLabel("\u265A", JLabel.RIGHT );
@@ -48,6 +52,11 @@ public class HiFrame extends JFrame {
     	this.white = new JTextField();
     	this.black = new JTextField();
     	
+    	white.setFont(new Font("Purisa",Font.BOLD,18));
+    	black.setFont(new Font("Purisa",Font.BOLD,18));
+    	white.setForeground(Color.ORANGE);
+    	black.setForeground(Color.ORANGE);
+    	
     	centerPanel.add(whiteKing);
     	centerPanel.add(white);	
     	centerPanel.add(blackKing);
@@ -55,11 +64,17 @@ public class HiFrame extends JFrame {
     	
     	JPanel southPanel = new JPanel();
     	layout.add(southPanel,BorderLayout.SOUTH);
+    	southPanel.setBackground(new Color(255, 229, 180));
     	
     	JButton start=new JButton("Start");
     	southPanel.add(start);
     	
     	start.addActionListener(event -> controller.start());
+    	start.setBackground(new Color(255, 253, 208));
+    	start.setForeground(new Color(255, 117, 24));
+    	start.setBorder(BorderFactory.createMatteBorder(2,2,2,2,new Color(255, 117, 24)));
+    	start.setPreferredSize(new Dimension(60,30));
+    	start.setFont(new Font("Purisa",Font.BOLD,15));
     	
 	}
 	

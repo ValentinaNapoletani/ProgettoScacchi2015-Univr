@@ -36,5 +36,11 @@ public class ChessBoardModel implements Model {
 	public void setView(View view) {
 		this.view=view;
 	}
+	
+	@Override
+	public void pieceSwap(Position pos,Piece piece){
+		chessBoard.pieceSwap(pos,piece);
+		view.onConfigurationChange();
+	}
 
 }
