@@ -15,7 +15,6 @@ public class HiFrame extends JFrame {
 	public HiFrame() {
 		setTitle("Wellcome");
 		
-		
 	}
 	
 	public void createLayout(Controller controller) {

@@ -1,10 +1,10 @@
 package View;
 
 import Model.*;
-import java.util.ArrayList;
-import javax.swing.*;
-import java.awt.*;
 import Controller.*;
+import java.awt.*;
+import javax.swing.*;
+import java.util.ArrayList;
 
 public class PromotionDialog extends JDialog {
 	
@@ -34,13 +34,17 @@ public class PromotionDialog extends JDialog {
 		this.add(panel);
 		panel.setBackground(new Color(218,253,218));
 		
-		ArrayList<Piece> jumpedPieces= turn==Color.white ? blackPieces : whitePieces;
+		ArrayList<Piece> jumpedPieces= turn==Color.white ? (ArrayList<Piece>) blackPieces.clone() : (ArrayList<Piece>) whitePieces.clone();
 		int pawn=0;
 		
-		for(Piece piece: jumpedPieces)
+		for(int j=0;j< jumpedPieces.size();j++) {
+			Piece piece=jumpedPieces.get(j);
 			if(piece instanceof Pawn)
 				pawn++;
-		
+			for(int i=0;i< jumpedPieces.size();i++)
+				if (jumpedPieces.get(i).getUnicode()==piece.getUnicode() && jumpedPieces.get(i).getCoordinates()!=piece.getCoordinates())
+					jumpedPieces.remove(piece);
+		}
 	
 		JLabel label=new JLabel(jumpedPieces.isEmpty() || pawn==jumpedPieces.size() ? "There are no jumped pieces for the pawn's promotion " :"	Choose a piece for the pawn's promotion:");
 		panel.add(label);
@@ -49,10 +53,10 @@ public class PromotionDialog extends JDialog {
 		
 		
 		//JPanel piecePanel=new JPanel(new GridLayout(1, jumpedPieces.size()) );
-		JPanel piecePanel=new JPanel(new FlowLayout() );
+		JPanel piecePanel=new JPanel(new FlowLayout() );		
 		
 		for(Piece piece : jumpedPieces) {
-			if(!(piece instanceof Pawn))
+			if(!(piece instanceof Pawn))		
 			piecePanel.add(mkButton(piece));
 		}
 		
@@ -68,7 +72,7 @@ public class PromotionDialog extends JDialog {
 		button.setBackground(new Color(152,255,152));
 		button.setFont(new Font("Tahoma",Font.BOLD,25));
 		
-		button.addActionListener(event -> controller.promotion(p,piece));
+		button.addActionListener(event -> controller.promotion(p,piece,this));
 		
 		return button;
 	}

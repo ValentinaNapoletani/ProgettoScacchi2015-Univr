@@ -96,9 +96,13 @@ public class ChessBoard implements Configuration {
 		result.chessBoardMatrix[initialCoord.x][initialCoord.y] = null;	
 		result.chessBoardMatrix[finalCoord.x][finalCoord.y] = toMove;
 		at(initialCoord).setCoordinates(finalCoord);
-		
+				
 		return result;
 		
+	}
+	
+	public Piece[][] getChessboardMatrix(){
+		return chessBoardMatrix;
 	}
 	
 	public boolean equals(Object obj) {
@@ -126,6 +130,10 @@ public class ChessBoard implements Configuration {
 	
 	public Color getTurn() {
 		return turn;
+	}
+	
+	public void setTurn(Color c){
+		turn=c;
 	}
 
 	
@@ -199,5 +207,6 @@ public class ChessBoard implements Configuration {
 	public void pieceSwap(Position pos,Piece piece){
 		
 		chessBoardMatrix[pos.x][pos.y]=piece;
+		piece.setCoordinates(pos);
 	}
 }

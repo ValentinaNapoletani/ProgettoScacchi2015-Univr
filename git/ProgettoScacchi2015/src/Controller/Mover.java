@@ -20,41 +20,42 @@ public class Mover {
 		
 	}
 	
-	public void moveAt(Position coordinates,Object o){
-		 if (isLegalMove(coordinates) ) {	 
+	public void moveAt(Position from,Position coordinates,Object o){
+		 if (isLegalMove(from,coordinates) ) {	 
+			 //se mangio un pezzo lo aggiungo alla lista dei mangiati
 			 if ( model.at(coordinates) != null && !(model.at(coordinates) instanceof King) ) {
 					if( model.at(coordinates).getColor()== Color.white)
 						controller.getwhitePieces().add(model.at(coordinates));
 					else controller.getblackPieces().add(model.at(coordinates));
 			 
 			 }
-			 model.setConfiguration(model.getChessBoard().moveAt(controller.getFrom(),coordinates));
+			 model.setConfiguration(model.getChessBoard().moveAt(from,coordinates));
 			 
 		 }
 		 else view.illegalMove(o);
 			 
 	}
 	
-	public boolean isLegalMove(Position coordinates){
+	public boolean isLegalMove(Position from,Position coordinates){
 		
 		//La destinazione non contiene una pedina con colore uguale al turno
-		 if (model.at(coordinates)==null || model.at(coordinates).getColor() != model.getChessBoard().getTurn()) {
+		 if (model.at(coordinates)==null || model.at(coordinates).getColor() != model.at(from).getColor()) {
 			 //controllo mosse pedone
-			 if ( model.at(controller.getFrom()) instanceof Pawn ) {
+			 if ( model.at(from) instanceof Pawn ) {
 			 
-				 if ( model.at(coordinates) == null && coordinates.x == controller.getFrom().x)
+				 if ( model.at(coordinates) == null && coordinates.x == from.x)
 					 return true;
-				 else if ( model.at(coordinates) != null && coordinates.x != controller.getFrom().x)
+				 else if ( model.at(coordinates) != null && coordinates.x != from.x)
 					 return true;
 				 else return false;
 			 }
 		 		 
 			 //controllo che non si saltino pedine (escluso cavallo)
-			 if (!(model.at(controller.getFrom()) instanceof Knight)) {
-				 if(freePath(coordinates))
+			 if (!(model.at(from) instanceof Knight)) {
+				 if(freePath(from,coordinates))
 					 	return true;
 			 }
-			 else if (model.at(controller.getFrom()) instanceof Knight)
+			 else if (model.at(from) instanceof Knight)
 				 return true;
 		 }
 		 return false;
@@ -75,25 +76,26 @@ public class Mover {
 		return null;
 	}
 	
-	public boolean freePath(Position coordinates){
-		Position pos=new Position(coordinates.x,coordinates.y);
+	public boolean freePath(Position from ,Position to){
+		
+		Position pos=new Position(to.x,to.y);
 		
 	    //spostamento verticale
-		if(coordinates.x == controller.getFrom().x) {
-			pos.x=coordinates.x;
+		if(to.x == from.x) {
+			pos.x=to.x;
 			//in giù
-			if(coordinates.y > controller.getFrom().y) {
-				pos.y=(controller.getFrom().y)+1;
-				while(pos.y != coordinates.y) {
+			if(to.y > from.y) {
+				pos.y=(from.y)+1;
+				while(pos.y != to.y) {
 					if(model.at(pos) != null)
 						return false;
 					(pos.y)++;
 				}
 			}
 			//in su
-			else if(coordinates.y < controller.getFrom().y) {
-				pos.y=(controller.getFrom().y)-1;
-				while(pos.y!= coordinates.y) {
+			else if(to.y < from.y) {
+				pos.y=(from.y)-1;
+				while(pos.y!= to.y) {
 					if(model.at(pos) != null)
 						return false;
 					(pos.y)--;
@@ -102,20 +104,20 @@ public class Mover {
 		}
 		
 		//spostamento orizzontale
-		else if(coordinates.y == controller.getFrom().y) {
-			pos.y=coordinates.y;
+		else if(to.y == from.y) {
+			pos.y=to.y;
 			//a dx
-			if(coordinates.x > controller.getFrom().x) {
+			if(to.x > from.x) {
 				pos.x=(controller.getFrom().x)+1;
-				while(pos.x != coordinates.x) {
+				while(pos.x != to.x) {
 					if(model.at(pos) != null)
 						return false;
 				pos.x++;
 				}
 			}
-			else if(coordinates.x < controller.getFrom().x) {
-				pos.x=(controller.getFrom().x)-1;
-				while(pos.x != coordinates.x) {
+			else if(to.x < from.x) {
+				pos.x=(from.x)-1;
+				while(pos.x != to.x) {
 					if(model.at(pos) != null)
 						return false;
 					(pos.x)--;
@@ -126,49 +128,51 @@ public class Mover {
 		//spostamento obliquo
 		else {
 			//vado verso dx
-			if(coordinates.x > controller.getFrom().x)
-				if(coordinates.y < controller.getFrom().y){ //su
-					pos.y=(controller.getFrom().y)-1;
-					pos.x=(controller.getFrom().x)+1;
-					while(pos.x != coordinates.x && pos.y != coordinates.y) {
+			if(to.x > from.x) {
+				if(to.y < from.y){ //su
+					pos.y=(from.y)-1;
+					pos.x=(from.x)+1;
+					while(pos.x != to.x && pos.y != to.y) {
 						if(model.at(pos) != null)
 							return false;
 						(pos.x)++;
 						(pos.y)--;
 					}
-				}		
-				else if (coordinates.y > controller.getFrom().y) {//giù
-					pos.y=(controller.getFrom().y)+1;
-					pos.x=(controller.getFrom().x)+1;
-					while(pos.x != coordinates.x && pos.y != coordinates.y) {
+				}	
+				else if (to.y > from.y) {//giù
+					pos.y=(from.y)+1;
+					pos.x=(from.x)+1;
+					while(pos.x != to.x && pos.y != to.y) {
 						if(model.at(pos) != null)
 							return false;
 						(pos.x)++;
 						(pos.y)++;
 					}
 				}
-				//vado verso sx
-				else if(coordinates.x < controller.getFrom().x)
-					if(coordinates.y < controller.getFrom().y){ //su
-						pos.y=(controller.getFrom().y)-1;
-						pos.x=(controller.getFrom().x)-1;
-						while(pos.x != coordinates.x && pos.y != coordinates.y) {
-							if(model.at(pos) != null)
-								return false;
-							(pos.x)--;
-							(pos.y)--;
-						}	
-					}
-					else if (coordinates.y > controller.getFrom().y) {//giù
-						pos.y=(controller.getFrom().y)+1;
-						pos.x=(controller.getFrom().x)-1;
-						while(pos.x != coordinates.x && pos.y != coordinates.y) {
-							if(model.at(pos) != null)
-								return false;
-							(pos.x)--;
-							(pos.y)++;
-						}
+			}
+			//vado verso sx
+			else if(to.x < from.x) {
+				if(to.y < from.y){ //su
+					pos.y=(from.y)-1;
+					pos.x=(from.x)-1;
+					while(pos.x != to.x && pos.y != to.y) {
+						if(model.at(pos) != null)
+							return false;
+						(pos.x)--;
+						(pos.y)--;
 					}	
+				}
+				else if (to.y > from.y) {//giù
+					pos.y=(from.y)+1;
+					pos.x=(from.x)-1;
+					while(pos.x != to.x && pos.y != to.y) {
+						if(model.at(pos) != null)
+							return false;
+						(pos.x)--;
+						(pos.y)++;
+					}
+				}	
+			}
 		}
 		
 		return true;

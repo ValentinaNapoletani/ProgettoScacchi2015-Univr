@@ -98,7 +98,7 @@ public class ChessFrame extends JFrame {
     	this.piecesArea=new TextArea("",10,1,TextArea.SCROLLBARS_NONE);
     	this.piecesArea.setEditable(false);
     	this.piecesArea.setFont(new Font("Tahoma",Font.BOLD,40));
-    	this.piecesArea.setBackground(Color.ORANGE);
+    	this.piecesArea.setBackground(new Color(255, 229, 180));
 
     
     	Panel2.add(piecesArea);
@@ -112,7 +112,7 @@ public class ChessFrame extends JFrame {
     	this.piecesArea2=new TextArea("",10,1,TextArea.SCROLLBARS_NONE);
     	this.piecesArea2.setEditable(false);
     	this.piecesArea2.setFont(new Font("Tahoma",Font.BOLD,40));
-    	this.piecesArea2.setBackground(Color.ORANGE);
+    	this.piecesArea2.setBackground(new Color(255, 229, 180));
     	
     	Panel.add(piecesArea2);
     
@@ -176,13 +176,6 @@ public class ChessFrame extends JFrame {
                 
             	HiFrame hiFrame = new HiFrame();
             	ChessFrame frame = new ChessFrame(hiFrame);
-            	//ArrayList<Piece> p=new ArrayList<>();
-            	//ArrayList<Piece> p2=new ArrayList<>();
-            	
-            	/*p.add(new Rook(Color.white,new Position(2,7),"\u265C"));
-        		p.add(new Knight(Color.white,new Position(5,7),"\u265E"));
-        		p.add(new Bishop(Color.white,new Position(1,7),"\u265D"));
-        		p.add(new Queen(Color.white,new Position(4,7),"\u265B"));*/
         
             	hiFrame.createLayout(frame.getController());
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -190,7 +183,7 @@ public class ChessFrame extends JFrame {
                 hiFrame.setSize(400,300);
                 hiFrame.setAlwaysOnTop(true);
                 hiFrame.setVisible(true); 
-               // new PromotionDialog(frame,p,p2,Color.black,frame.controller,new Position(0,5)).setVisible(true);;
+             
                              
             }
         });

@@ -5,25 +5,13 @@ import java.util.ArrayList;
 
 public class Pawn extends Piece {
 	
-	private boolean promoted;
-	
 	public Pawn(Color color, Position coordinates ,String unicode) {
 		super(color,coordinates,unicode);	
-		this.promoted=false;
+		
 	} 
 	
-		
-	public boolean getPromoted(){
-		return promoted;
-	}
-
 	@Override
 	public boolean isLegalMove(Position from,Position to) {
-		
-	//	if(from.y==0 || from.y==7) {
-		//	promoted=true;
-		//	return false;
-		//}
 		
 		return getValidPosition(from).contains(to) ? true : false;	
 	}

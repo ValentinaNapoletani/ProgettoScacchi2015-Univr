@@ -3,6 +3,7 @@ package Controller;
 import java.awt.event.*;
 import Model.Position;
 import Model.Piece;
+import View.PromotionDialog;
 
 public interface Controller {
 	
@@ -11,6 +12,6 @@ public interface Controller {
 	void setupNewGame();
 	void quitGame();
 	void start();
-	void promotion(Position pos,Piece piece);
+	void promotion(Position pos,Piece piece,PromotionDialog prom);
 	
 } 

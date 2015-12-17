@@ -110,7 +110,9 @@ public class ChessBoardPanel extends JPanel implements View {
 	
 	public void showFinalDialog(Color color,HiFrame hiFrame) {
 		frame.getRoundLabel().setText("Check Mate");
-		new FinalDialog(frame,hiFrame,color).setVisible(true); 
+		model.setConfiguration(new ChessBoard());
+		new FinalDialog(frame,hiFrame,color).setVisible(true);
+		
 	}
 	
 	public void showPromotionDialog(Position p){

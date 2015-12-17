@@ -74,9 +74,7 @@ public class Queen extends Piece {
 			else {
 				x2++;
 				y2++;
-			}
-			
-		//System.out.println(validPosition);
+			}			
 		
 		return validPosition;
 	}

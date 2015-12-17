@@ -62,7 +62,7 @@ public class ChessBoardController implements Controller {
 						
 				coordinates.x=x;
 				coordinates.y=y;
-				mover.moveAt(coordinates,e.getSource());
+				mover.moveAt(from,coordinates,e.getSource());
 		
 				selected=false;
 				
@@ -132,9 +132,23 @@ public class ChessBoardController implements Controller {
 	}
 	
 	@Override
-	public void promotion(Position pos,Piece piece){	
+	public void promotion(Position pos,Piece piece,PromotionDialog prom){	
 		model.pieceSwap(pos,piece);
+		prom.dispose();
+		
+		//rimuovi pezzo rinato da lista pezzi mangiati
+		if (piece.getColor().equals(Color.white)) {
+			for(int i=0;i< whitejumped.size();i++)
+				if (whitejumped.get(i).equals(piece))
+					whitejumped.remove(whitejumped.get(i));
+		}
+		else 
+			for (Piece p2 : blackjumped)
+				if (p2.equals(piece))
+					blackjumped.remove(p2);
 		
 	}
+	
+	
 
 }
