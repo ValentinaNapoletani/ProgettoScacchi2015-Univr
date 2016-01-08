@@ -3,11 +3,22 @@ package Model;
 import java.awt.Color;
 import java.util.ArrayList;
 
+/**
+ * Classe che implementa la configurazione della scacchiera.
+ * 
+ * @author Napoletani Valentina VR377688
+ */
+
 public class ChessBoard implements Configuration {
 
 	private Piece[][] chessBoardMatrix;
 	private static Color turn;
 	
+	/**
+	 * Costruttore della classe. Crea la scacchiera inserendo i pezzi nelle posizioni di partenza.
+	 * 
+	 * @param i Indica che la scacchiera viene inizializzata con i pezzi posti allo stato iniziale. 
+	 */	
 	public ChessBoard(int i) {
 		
 		this.chessBoardMatrix = new Piece[8][8];
@@ -17,6 +28,12 @@ public class ChessBoard implements Configuration {
 		
 	}
 	
+	/**
+	 * Costruttore della classe. La scacchiera viene creata in una configurazione presisa.
+	 * 
+	 * @param turn Colore del turno corrente.
+	 * @param chessBoardMatrix Matrice dei pezzi.
+	 */
 	public ChessBoard(Color turn, Piece[][] chessBoardMatrix) {
 		
 		this.chessBoardMatrix = new Piece[8][8];
@@ -27,13 +44,18 @@ public class ChessBoard implements Configuration {
 		
 	}
 	
+	/**
+	 * Costruttore della classe. La scacchiera viene creata vuota.
+	 */
 	public ChessBoard() {
 		
 		this.chessBoardMatrix = new Piece[8][8];
 		
 	}
 
-	
+	/**
+	 * Il metodo inizializza i pezzi allo stato iniziale della partita.
+	 */
 	public void initializePieces(){
 		
 		//pedoni bianchi
@@ -77,6 +99,12 @@ public class ChessBoard implements Configuration {
 		
 	}
 
+	/**
+	 * Il metodo ritorna il pezzo ad una determinata posizione.
+	 * 
+	 * @param coordinates Le coordinate del pezzo.
+	 * @return Ritorna il pezzo nella posizione indicata dal parametro.
+	 */
 	@Override
 	public Piece at(Position coordinates) {
 		if (chessBoardMatrix[coordinates.x][coordinates.y]!=null)
@@ -84,6 +112,12 @@ public class ChessBoard implements Configuration {
 		else return null;
 	}
 
+	/** Muove un pezzo sulla scacchiera.
+	 * 
+	 * @param initialCoord Le coordiante iniziali da cui spostare il pezzo.
+	 * @param finalCoord Le coordiante finali di arrivo del pezzo.
+	 * @return La scacchiera con il pezzo spostato.
+	 */
 	@Override
 	public ChessBoard moveAt(Position initialCoord, Position finalCoord) {
 		
@@ -101,10 +135,20 @@ public class ChessBoard implements Configuration {
 		
 	}
 	
+	/** Ritorna la matrice dei pezzi.
+	 * 
+	 * @return Ritorna la matrice dei pezzi.
+	 */
 	public Piece[][] getChessboardMatrix(){
 		return chessBoardMatrix;
 	}
 	
+	/** Verifica l'ugualianza tra due scacchiere.
+	 * Due scacchiere sono uguali se casella per casella contengono lo stesso pezzo oppure non contengono pezzi.
+	 * 
+	 * @param obj L'oggetto da confrontare.
+	 * @return Ritorna true se le scacchiere sono uguali,false altrimenti.
+	 */
 	public boolean equals(Object obj) {
 		
 		Position coordinates=new Position();
@@ -128,15 +172,26 @@ public class ChessBoard implements Configuration {
 		return equals;	
 	}
 	
+	/** Ritorna il colore del turno.
+	 * 
+	 * @return Ritorna il colore del turno.
+	 */
 	public Color getTurn() {
 		return turn;
 	}
 	
+	/**
+	 * Imposta il turno del colore passato come paramentro. Utile per i test.
+	 *
+	 * @param c Colore del turno da impostare.
+	 */
 	public void setTurn(Color c){
 		turn=c;
 	}
 
-	
+	/**
+	 * Imposta il turno controllando quello attuale.
+	 */
 	public void setTurn() {
 		if (getTurn()==Color.white)
 			turn=Color.black;
@@ -144,6 +199,10 @@ public class ChessBoard implements Configuration {
 		
 	}
 	
+	/** Il metodo ritorna la lista dei pezzi avversari.
+	 * 
+	 * @return Ritorna l'ArrayList dei pezzi avversari.
+	 */
 	public ArrayList<Piece> getOpponentsPieces() {
 		ArrayList<Piece> Pieces= new ArrayList<> ();
 		for (int y=0; y<8; y++)
@@ -153,6 +212,10 @@ public class ChessBoard implements Configuration {
 		return Pieces;	
 	}
 	
+	/** Il metodo ritorna la lista dei pezzi del colore corrispondente al turno.
+	 * 
+	 * @return Ritorna l'ArrayList dei pezzi del colore corrispondente al turno.
+	 */
 	public ArrayList<Piece> getMyPieces() {
 		ArrayList<Piece> Pieces= new ArrayList<> ();
 		for (int y=0; y<8; y++)
@@ -162,6 +225,10 @@ public class ChessBoard implements Configuration {
 		return Pieces;	
 	}
 	
+	/**Ritorna la posizione del re del colore corrispondente al turno.
+	 * 
+	 * @return Ritorna la posizione del re del colore corrispondente al turno.
+	 */
 	public Position getMyKingCoord(){
 		
 		Position whiteKing= new Position();
@@ -185,6 +252,10 @@ public class ChessBoard implements Configuration {
 		return getTurn()== Color.white ? whiteKing : blackKing;
 	}
 	
+	/**Ritorna la posizione del re avversario.
+	 * 
+	 * @return Ritorna la posizione del re avversario.
+	 */
 	public	Position getEnemyKingCoord(){
 		
 		Position whiteKing= new Position();
@@ -204,6 +275,12 @@ public class ChessBoard implements Configuration {
 		return getTurn()== Color.white ? blackKing : whiteKing;
 	}
 	
+	/**
+	 * Gestisce la promozione del pedone, modificando la scacchiera attuale.
+	 * 
+	 * @param pos La posizione in cui scambiare il pedone con un altro pezzo per promuoverlo.
+	 * @param piece Il pezzo da far tornare in gioco.
+	 */
 	public void pieceSwap(Position pos,Piece piece){
 		
 		chessBoardMatrix[pos.x][pos.y]=piece;

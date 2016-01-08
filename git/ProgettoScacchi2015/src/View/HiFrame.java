@@ -5,6 +5,11 @@ import javax.swing.*;
 import java.awt.*;
 import Controller.*;
 
+/**
+ * La classe implementa la finestra iniziale dove i giocatori inseriscono il loro nome, accanto al colore corrispondente.
+ * 
+ * @author Napoletani Valentina VR377688
+ */
 
 public class HiFrame extends JFrame {
 	
@@ -12,11 +17,19 @@ public class HiFrame extends JFrame {
 	private JTextField black;
 	private static final long serialVersionUID=1L;
 
+	/**
+	 * Costruttore della classe.
+	 */
 	public HiFrame() {
 		setTitle("Wellcome");
 		
 	}
 	
+	/**
+	 * Il metodo configura il layout della finestra.
+	 * 
+	 * @param controller Il controller.
+	 */
 	public void createLayout(Controller controller) {
 		
 		JPanel layout = new JPanel(new BorderLayout());

@@ -49,7 +49,7 @@ public class MoverTest {
 		assertTrue(mover.isLegalMove(new Position(1,5), new Position(3,4)));
 	}
 	
-	//test per verificare l'aggiunta di un pezzo alla lista se viene mangiato
+	//test per verificare l'aggiunta di un pezzo alla lista dei pezzi mangiati, se viene mangiato.
 	@Test
 	public void testjumped(){
 		
@@ -65,7 +65,7 @@ public class MoverTest {
 		assertTrue(controller1.getblackPieces().contains(queen));
 	}
 	
-	//test per verifivare la presenza di un vincitore
+	//test per verificare la presenza di un vincitore.
 	@Test
 	public void testWinner(){
 		

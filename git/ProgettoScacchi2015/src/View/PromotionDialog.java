@@ -6,6 +6,11 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
 
+/**La classe implementa la finestra in cui il giocatore può scegliere con quale pezzo promuovere il pedone.
+ * 
+ * @author Napoletani Valentina VR377688
+ *
+ */
 public class PromotionDialog extends JDialog {
 	
 	private static final long serialVersionUID = 1L;
@@ -15,6 +20,15 @@ public class PromotionDialog extends JDialog {
 	private Controller controller;
 	private Position p;
 	
+	/**Il costruttore della classe.
+	 * 
+	 * @param frame La finestra principale di gioco.
+	 * @param whitePieces La lista di pezzi bianchi mangiati.
+	 * @param blackPieces La lista di pezzi neri mangiati.
+	 * @param turn Il turno corrente del giocatore.
+	 * @param controller Il controller.
+	 * @param p La posizione in cui si trova il pedone da promuovere.
+	 */
 	public PromotionDialog(ChessFrame frame, ArrayList<Piece> whitePieces, ArrayList<Piece> blackPieces, Color turn,Controller controller,Position p){
 		
 		super(frame, "Promotion", true);
@@ -28,7 +42,7 @@ public class PromotionDialog extends JDialog {
 		this.pack();
 	}
 	
-	public void createLayout(){
+	private void createLayout(){
 		
 		JPanel panel=new JPanel(new GridLayout(2,1));
 		this.add(panel);
@@ -52,7 +66,6 @@ public class PromotionDialog extends JDialog {
 		label.setFont(new Font("Purisa",Font.BOLD,20));
 		
 		
-		//JPanel piecePanel=new JPanel(new GridLayout(1, jumpedPieces.size()) );
 		JPanel piecePanel=new JPanel(new FlowLayout() );		
 		
 		for(Piece piece : jumpedPieces) {
@@ -65,7 +78,7 @@ public class PromotionDialog extends JDialog {
 		
 	}
 	
-	public JButton mkButton(Piece piece){
+	private JButton mkButton(Piece piece){
 		
 		JButton button=new JButton(piece.getUnicode());
 		button.setForeground( turn==Color.white ? Color.black : Color.white);

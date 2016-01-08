@@ -5,16 +5,20 @@ import Model.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
 import java.util.ArrayList;
 
 
+/** Classe che gestisce l'interazione vista-modello, implementando il Controller.
+ * 
+ * @author Napoletani Valentina VR377688
+ *
+ */
 public class ChessBoardController implements Controller {
 	
 	private final View view;
 	private final Mover mover;
 	private final Model model;
-	private final HiFrame hiFrame;
+	private HiFrame hiFrame;
 	private final ChessFrame frame;
 	private Position from = new Position();
 	private boolean selected=false;
@@ -23,6 +27,14 @@ public class ChessBoardController implements Controller {
 	private CheckMateController controller; 
 	private JButton startButton;
 	
+	/**
+	 * Costruttore del controller.
+	 * 
+	 * @param view La vista.
+	 * @param model Il modello.
+	 * @param hiFrame La finestra dove si inseriscono i nomi dei giocatori.
+	 * @param frame La finestra principale di gioco.
+	 */
 	public ChessBoardController(View view, Model model, HiFrame hiFrame , ChessFrame frame){
 		this.view = view;
 		this.model=model;
@@ -33,11 +45,18 @@ public class ChessBoardController implements Controller {
 		view.setController(this);
 	}
 	
+	/**
+	 * Gestisce il click dei bottoni della scacchiera.
+	 * 
+	 * @param x La coordinata x del bottone su cui l'utente ha cliccato.
+	 * @param y La coordinata y del bottone su cui l'utente ha cliccato.
+	 * @param e L'evento generato dal click del bottone.
+	 */
 	@Override
 	public void onClick(int x,int y, ActionEvent e) {
 		Position coordinates= new Position(x,y);
 		
-		//non già selezionata partenza e seleziono una mia pedina
+		//non è già selezionata la partenza e seleziono una mia pedina
 		if(model.at(coordinates)!=null && model.at(coordinates).getColor() == model.getChessBoard().getTurn() && !selected){
 			this.from.x=x;
 			this.from.y=y;
@@ -46,7 +65,7 @@ public class ChessBoardController implements Controller {
 			view.selectCase(startButton); //implement view
 			
 		}
-		//deseleziono pezzo per fare una altra mossa--from[0]==x && from[1]==y
+		//deseleziono il pezzo per fare una altra mossa
 		else if (selected && startButton==(JButton)e.getSource()) {
 			this.selected=false;
 			startButton=(JButton)e.getSource();
@@ -71,9 +90,10 @@ public class ChessBoardController implements Controller {
 				
 				frame.getPiecesArea2().setText(frame.setJumpedPieces(whitejumped,blackjumped)[1]);
 				
+				//verifica scacco
 				Piece enemy=controller.isCheck(model.getChessBoard().getMyKingCoord());
 				if(enemy!=null){
-					view.colorOnCheck(model.getChessBoard().getMyKingCoord());
+					frame.getRoundLabel().setText("Check!!");
 					if(mover.therIsAWinner(enemy)!=null)
 						view.showFinalDialog(mover.therIsAWinner(enemy),hiFrame);
 				}
@@ -82,7 +102,7 @@ public class ChessBoardController implements Controller {
 						frame.getRoundLabel().setText(frame.setLabel(frame.getHiFrame().getWhite().getText(), frame.getHiFrame().getBlack().getText()));
 					
 			}
-			else  view.illegalMove(e.getSource()); //implement view
+			else  view.illegalMove(e.getSource()); 
 			
 			if (model.at(coordinates) instanceof Pawn && 
 					   ((y==0 && model.at(coordinates).getColor()==Color.white) || (y==7 && model.at(coordinates).getColor()==Color.black))) {
@@ -93,28 +113,57 @@ public class ChessBoardController implements Controller {
 	
 	}
 	
+	/**
+	 * Ritorna la posizione di partenza della pedina.
+	 * 
+	 * @return la posizione di partenza della pedina.
+	 */
 	public Position getFrom(){
 		return from;
 	}
 	
+	/**
+	 * Ritorna la lista dei pezzi bianchi che sono stati mangiati.
+	 * 
+	 * @return la lista dei pezzi bianchi che sono stati mangiati.
+	 */
 	public ArrayList<Piece> getwhitePieces(){
 		return whitejumped;
 	}
 	
+	/**
+	 * Ritorna la lista dei pezzi neri che sono stati mangiati.
+	 * 
+	 * @return la lista dei pezzi neri che sono stati mangiati.
+	 */
 	public ArrayList<Piece> getblackPieces(){
 		return blackjumped;
 	}
 	
+	/**
+	 * Gestisce l'evento generato al click del bottone di nuovo gioco da parte dell'utente
+	 * e genera una finestra dove poter inserire il nome dei giocatori.
+	 */
 	@Override
 	public void setupNewGame() {
+	
 		model.setConfiguration(new ChessBoard());
-		HiFrame frame= new HiFrame();
-		frame.createLayout(this);
-		frame.pack();
-        frame.setVisible(true);
+		hiFrame.getWhite().setText("");
+		hiFrame.getBlack().setText("");
+		hiFrame.setVisible(true);
+		
+		this.blackjumped.clear();
+		this.whitejumped.clear();
+		frame.getPiecesArea().setText("");
+		frame.getPiecesArea2().setText("");
+		frame.getRoundLabel().setText("");
+		
+        
 	}
 	
-	
+	/**
+	 * Gestisce l'evento generato al click del bottone di start da parte dell'utente.
+	 */
 	@Override
 	public void start() {
 		String whiteGamer = hiFrame.getWhite().getText();
@@ -126,11 +175,21 @@ public class ChessBoardController implements Controller {
 
 	}	
 
+	/**
+	 * Gestisce l'evento generato al click del bottone Quit, chiudendo la finestra di gioco.
+	 */
 	@Override
 	public void quitGame() {
 		System.exit(0);
 	}
 	
+	/**
+	 *  Gestisce l'evento di promozione del pedone.
+	 *  
+	 *  @param pos La posizione in cui scambiare il pedone con un altro pezzo per promuoverlo.
+	 *  @param piece Il pezzo da far tornare in gioco.
+	 *  @param prom La finestra di promozone del pedone.
+	 */
 	@Override
 	public void promotion(Position pos,Piece piece,PromotionDialog prom){	
 		model.pieceSwap(pos,piece);

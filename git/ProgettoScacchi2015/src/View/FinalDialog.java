@@ -1,15 +1,27 @@
 package View;
 
-//correggi allo scacco matto propone nuova partita
+
 import java.awt.*;
 import javax.swing.*;
 
+/**Classe che implementa la finestra finale, che indica alla fine della partita, il vincitore.
+ * 
+ * @author Napoletani Valentina VR377688
+ *
+ */
 public class FinalDialog extends JDialog {
 	
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private Color color;
 	
+	/**
+	 * Costruttore della classe.
+	 * 
+	 * @param frame La finestra principale di gioco.
+	 * @param hiFrame La finestra iniziale dove si inseriscono i nomi dei giocatori.
+	 * @param color Il colore del vincitore.
+	 */
 	public FinalDialog(ChessFrame frame,HiFrame hiFrame,Color color){
 		super(frame, "End!", true);
 		
@@ -22,7 +34,7 @@ public class FinalDialog extends JDialog {
 	}
 	
 	
-	public void createLayout(){
+	private void createLayout(){
 				
 		JPanel panel=new JPanel(new GridLayout(2,1));	
 		this.add(panel);

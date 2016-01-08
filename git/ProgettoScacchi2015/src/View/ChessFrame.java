@@ -7,16 +7,25 @@ import Controller.*;
 import Model.*;
 import java.util.ArrayList;
 
+/**Classe che implementa la finestra principale di gioco,estende JFrame.
+ * 
+ * @author Napoletani Valentina VR377688
+ *
+ */
 public class ChessFrame extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	private JLabel roundLabel;
 	private TextArea piecesArea;
 	private TextArea piecesArea2;
-	private final HiFrame hiFrame;
+	private HiFrame hiFrame;
 	private final ChessBoardModel model = new ChessBoardModel(new ChessBoard());
 	private final Controller controller;
 
+	/**
+	 *  Costruttore della classe.
+	 * @param hiFrame La finestra dove si inseriscono i nomi dei giocatori.
+	 */
     public ChessFrame(HiFrame hiFrame) {
     	
     	this.hiFrame=hiFrame;
@@ -119,6 +128,12 @@ public class ChessFrame extends JFrame {
    
     } 
 	
+    /**
+     * Ritorna una stringa con il turno, prendendo il nome del giocatore impostato nella hiFrame.
+     * @param white Il nome del giocatore con il colore bianco.
+     * @param black Il nome del giocatore con il colore nero.
+     * @return Una stringa relativa al turno di gioco.
+     */
     public String setLabel (String white, String black){
     	String result="";
     	if(model.getChessBoard().getTurn()==Color.white)	
@@ -129,6 +144,12 @@ public class ChessFrame extends JFrame {
     	
     }
     
+    /**Ritorna la lista di degli unicode dei pezzi bianchi e neri mangiati, da inserire nell'area di testo apposita.
+     * 
+     * @param white La lista dei pezzi bianchi mangiati.
+     * @param black La lista dei pezzi neri mangiati.
+     * @return Array delle due stringhe indicanti lo unicode dei pezzi neri e dei pezzi bianchi mangiati.
+     */
     public String[] setJumpedPieces(ArrayList<Piece> white, ArrayList<Piece> black){
     	String result[]= new String[2];
     	result[0]="";
@@ -140,30 +161,53 @@ public class ChessFrame extends JFrame {
     	return result;
     }
     
+    /**Ritorna l'area di testo dove inseire i pezzi bianchi mangiati.
+     * 
+     * @return l'area di testo dove inseire i pezzi bianchi mangiati.
+     */
     public TextArea getPiecesArea(){
     	return piecesArea;
     }
     
+    /**Ritorna l'area di testo dove inserire i pezzi neri mangiati.
+     * 
+     * @return l'area di testo dove inserire i pezzi neri mangiati.
+     */
     public TextArea getPiecesArea2(){
     	return piecesArea2;
     }
     
-    
-    private ChessBoardPanel addChessBoard() {
+    /**Ritorna il pannello contenente la scacchira.
+     * 
+     * @return Il pannello contenente la scacchira.
+     */
+    public ChessBoardPanel addChessBoard() {
     	
     	ChessBoardPanel chessBoard=new ChessBoardPanel(model,this); 
     	chessBoard.setBackground(new Color(255, 229, 180));
 		return chessBoard;
 	} 
     
+    /**Ritorna il controller.
+     * 
+     * @return Il controller.
+     */
     public Controller getController(){
 		return controller;
 	}
     
+    /**Ritorna la finestra dove si inseriscono i nomi dei giocatori.
+     * 
+     * @return hiFrame,la finestra dove si inseriscono i nomi dei giocatori.
+     */
     public HiFrame getHiFrame() {
     	return hiFrame;
     };
     
+    /**Ritorna l'etichetta relativa al turno.
+     * 
+     * @return L'etichetta relativa al turno.
+     */
     public JLabel getRoundLabel(){
     	return this.roundLabel;
     }

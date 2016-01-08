@@ -3,17 +3,30 @@ package Controller;
 import Model.*;
 import java.util.ArrayList;
 
+/** 
+ * Classe che controlla la gestione dello scacco e dello scacco matto.
+ */
 public class CheckMateController {
 	
 	private Model model;
 	private Piece enemy;
 	 
+	/**Costruttore della classe.
+	 * 
+	 * @param model Il modello.
+	 */
 	public CheckMateController(Model model){
 		this.model=model;
 		
 	}
 	
-	//gestione delle mosse (scacco/scacco matto)
+	/** Il metodo gestisce il controllo delle mosse in funzione dello scacco e dello scacco matto.
+	 * 
+	 * @param from Posizione di partenza del pezzo.
+	 * @param to Posizione di arrivo del pezzo.
+	 * @return True se la mossa è possibile,false altrimenti.
+	 */
+	
 	public boolean checkMoves(Position from,Position to) {
 		
 		boolean b=true;
@@ -53,7 +66,11 @@ public class CheckMateController {
 	return b;
 	}
 		
-	//lista di pezzi che possono salvare il re se è in scacco
+	/** Ritorna la lista di pezzi che possono salvare il re se è in scacco.
+	 * 
+	 * @param enemy Il pezzo nemico che sta mettendo sotto scacco il re.
+	 * @return la lista di pezzi che possono salvare il re se è in scacco.
+	 */
 	public ArrayList<Piece> getGoodPieces(Piece enemy){
 		
 		ArrayList<Piece> goodPieces=new ArrayList<>();
@@ -68,7 +85,13 @@ public class CheckMateController {
 		return goodPieces;
 	}
 
-	//ritorna se un pezzo sta salvando il re e da quale nemico
+	/**Verifica se un pezzo sta salvando il re e ritorna eventualmente il nemico.
+	 * 
+	 * @param pieces La lista dei pezzi nemici.
+	 * @param kingCoord Le coordinate del re.
+	 * @param goodPiece Il pezzo che potrebbe star salvando il re.
+	 * @return Il pezzo che mette sotto scacco il re.
+	 */
 	public Piece savingKing(ArrayList<Piece> pieces,Position kingCoord, Piece goodPiece){
 		
 		for (Piece p: pieces)
@@ -78,8 +101,13 @@ public class CheckMateController {
 		
 		return null;
 	}
+	/** Calcola il percorso del pezzo nemico verso il re.
+	 * 
+	 * @param p Il pezzo nemico.
+	 * @param kingCoord Le coordinate del re.
+	 * @return La lista delle coordinate del percorso tra il nemico e il re.
+	 */
 	
-	//calcolo percorso dei pezzi nemici verso il re
 	public ArrayList<Position> getCoordFromEnemyToKing(Piece p, Position kingCoord){
 		
 		ArrayList<Position> path= new ArrayList<>();
@@ -109,44 +137,15 @@ public class CheckMateController {
 				path.remove(path.size()-1); 
 			
 		}
-		
 			
 		return path;
 	}
-	
-	/*public boolean isCheck(Position kingCoord,Position from){
 		
-		boolean b=false;
-		
-		for (Piece p: model.getChessBoard().getTurn()==model.at(from).getColor() ? model.getChessBoard().getOpponentsPieces() : model.getChessBoard().getMyPieces())
-				if(p.getValidPosition(p.getCoordinates()).contains(kingCoord)) 
-					if (p instanceof Knight) {
-						b=true;
-						return b;	
-					}
-					else if (p instanceof Pawn && p.getCoordinates().x==kingCoord.x) {
-						b=false;
-						break;
-					}
-					else {
-						if(getCoordFromEnemyToKing(p,kingCoord).isEmpty()) {
-							b=true;
-							return b;
-						}
-						for (Position position : getCoordFromEnemyToKing(p,kingCoord)) {	
-							if(model.at(position)!=null) {
-								b=false;
-								break;
-							}
-							else 
-								b=true;			
-						}	
-						if (b==true)
-							return b;
-					}
-		return b;
-	}*/
-	
+	/** Verifica se c'è scacco ed eventualmente ritorna il pezzo che mette il re in scacco.
+	 * 
+	 * @param kingCoord Le coordiante del re.
+	 * @return Il pezzo che mette il re in scacco oppure null.
+	 */
 	public Piece isCheck(Position kingCoord){
 		
 		
@@ -179,6 +178,11 @@ public class CheckMateController {
 		return enemy;
 	}
 	
+	/**
+	 * Ritorna le coordinate in cui il re può spostarsi rimanendo in posizione sicura rispetto al pezzo enemy.
+	 * @param enemy Il pezzo nemico.	
+	 * @return Ritorna la lista delle coordinate sicure per il re.
+	 */
 	public ArrayList<Position> getSafeCoordinates(Piece enemy){
 		
 		ArrayList<Position> safePos=new ArrayList<>();
@@ -193,7 +197,12 @@ public class CheckMateController {
 		return safePos;
 	}
 	
-	
+	/**
+	 * Verifica la presenza di scacco matto.
+	 * 
+	 * @param enemy Il pezzo nemico che nella posizione attuale attacca il re.
+	 * @return True se c'è scacco matto,false altrimenti.
+	 */
 	public boolean isCheckMate(Piece enemy){
 	
 		if( getSafeCoordinates(enemy).isEmpty() && getGoodPieces(enemy).isEmpty()){

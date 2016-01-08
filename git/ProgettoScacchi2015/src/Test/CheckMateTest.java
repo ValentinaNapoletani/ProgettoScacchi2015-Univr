@@ -28,39 +28,38 @@ public class CheckMateTest {
 	ChessBoardController controller1=new ChessBoardController(view,model,hiframe,frame);
 	CheckMateController controller2=new CheckMateController(model);	
 	Mover mover=new Mover(model,view,controller1,controller2);
-	//OTTIMIZZA con solo 2 chessboard
 	@Test
 	public void testCheckMoves() {
 		
 		ChessBoard chessboard = new ChessBoard(1);
 		ChessBoard c1= chessboard.moveAt(new Position(3,6),new Position(3,5));
-		ChessBoard c2= c1.moveAt(new Position(4,1),new Position(4,2));
-		ChessBoard c3= c2.moveAt(new Position(3,7),new Position(3,6));
-		ChessBoard c4=c3.moveAt(new Position(5,0),new Position(1,4));
+		chessboard= c1.moveAt(new Position(4,1),new Position(4,2));
+		c1= chessboard.moveAt(new Position(3,7),new Position(3,6));
+		chessboard=c1.moveAt(new Position(5,0),new Position(1,4));
 		
-		Model model=new ChessBoardModel(c4);
+		Model model=new ChessBoardModel(c1);
 		CheckMateController controller2=new CheckMateController(model);			
 		//il re non può essere scoperto
 		assertFalse(controller2.checkMoves(new Position(3,6),new Position(3,7)));
 		
 		chessboard = new ChessBoard(1);
 		c1= chessboard.moveAt(new Position(4,6),new Position(4,4));
-		c2= c1.moveAt(new Position(3,1),new Position(3,3));
-		c3= c2.moveAt(new Position(4,4),new Position(4,3));
-		c4= c3.moveAt(new Position(3,3),new Position(3,4));
-		ChessBoard c5= c4.moveAt(new Position(4,3),new Position(4,2));
-		ChessBoard c6= c5.moveAt(new Position(3,4),new Position(3,5));
+		chessboard= c1.moveAt(new Position(3,1),new Position(3,3));
+		c1= chessboard.moveAt(new Position(4,4),new Position(4,3));
+		chessboard= c1.moveAt(new Position(3,3),new Position(3,4));
+		c1= chessboard.moveAt(new Position(4,3),new Position(4,2));
+		chessboard= c1.moveAt(new Position(3,4),new Position(3,5));
 		
-		model=new ChessBoardModel(c6);
+		model=new ChessBoardModel(chessboard);
 		controller2=new CheckMateController(model);
 		//il re non può mettersi in scacco
 		assertFalse(controller2.checkMoves(new Position(4,7),new Position(4,6)));
 		
-		ChessBoard c7= c6.moveAt(new Position(3,7),new Position(6,4));
-		ChessBoard c8= c7.moveAt(new Position(5,1),new Position(5,2));
-		ChessBoard c9= c8.moveAt(new Position(6,4),new Position(7,3));
+		c1= chessboard.moveAt(new Position(3,7),new Position(6,4));
+		chessboard= c1.moveAt(new Position(5,1),new Position(5,2));
+		c1= chessboard.moveAt(new Position(6,4),new Position(7,3));
 		
-		model=new ChessBoardModel(c9);
+		model=new ChessBoardModel(c1);
 		controller2=new CheckMateController(model);
 		
 		//il re deve togliersi dallo scacco ma non può in questo caso
@@ -72,23 +71,22 @@ public class CheckMateTest {
 		
 		ChessBoard chessboard = new ChessBoard(1);
 		ChessBoard c1= chessboard.moveAt(new Position(3,6),new Position(3,4));
-		ChessBoard c2= c1.moveAt(new Position(4,1),new Position(4,2));	
-		ChessBoard c3= c2.moveAt(new Position(7,6),new Position(7,5));
-		ChessBoard c4=c3.moveAt(new Position(5,0),new Position(1,4));
+		chessboard= c1.moveAt(new Position(4,1),new Position(4,2));	
+		c1= chessboard.moveAt(new Position(7,6),new Position(7,5));
+		chessboard=c1.moveAt(new Position(5,0),new Position(1,4));
 		
-		Model model=new ChessBoardModel(c4);
+		Model model=new ChessBoardModel(chessboard);
 	
 		controller2=new CheckMateController(model);
 		
 		//il re è in scacco
 		assertTrue(controller2.isCheck(new Position(4,7)).equals(new Bishop(Color.black,new Position(1,4),"\u265D")));
-		//assertTrue(!(controller2.isCheck(new Position(4,7)).equals(null)));
 		
 		//la regina salva il re che esce dallo scacco
-		ChessBoard c5=c4.moveAt(new Position(3,7),new Position(3,6));
-		c5.moveAt(new Position(0,1),new Position(0,2));
+		c1=chessboard.moveAt(new Position(3,7),new Position(3,6));
+		c1.moveAt(new Position(0,1),new Position(0,2));
 		
-		model=new ChessBoardModel(c5);
+		model=new ChessBoardModel(c1);
 	
 		controller2=new CheckMateController(model);
 		assertEquals(controller2.isCheck(new Position(4,7)),null);
@@ -100,12 +98,12 @@ public class CheckMateTest {
 		
 		ChessBoard chessboard = new ChessBoard(1);
 		ChessBoard c1= chessboard.moveAt(new Position(4,6),new Position(4,5));
-		ChessBoard c2= c1.moveAt(new Position(5,1),new Position(5,2));	
-		ChessBoard c3= c2.moveAt(new Position(0,6),new Position(0,5));
-		ChessBoard c4=c3.moveAt(new Position(6,1),new Position(6,3));
-		ChessBoard c5=c4.moveAt(new Position(3,7),new Position(7,3));
+		chessboard= c1.moveAt(new Position(5,1),new Position(5,2));	
+		c1= chessboard.moveAt(new Position(0,6),new Position(0,5));
+		chessboard=c1.moveAt(new Position(6,1),new Position(6,3));
+		c1=chessboard.moveAt(new Position(3,7),new Position(7,3));
 		
-		Model model=new ChessBoardModel(c5);
+		Model model=new ChessBoardModel(c1);
 	
 		controller2=new CheckMateController(model);
 		

@@ -4,6 +4,12 @@ import Model.*;
 import java.awt.Color;
 import View.*;
 
+/**
+ * Classe che gestisce i movimenti sulla scacchiera.
+ * 
+ * @author Napoletani Valentina VR377688
+ *
+ */
 public class Mover {
 	
 	private Model model;
@@ -11,6 +17,14 @@ public class Mover {
 	private final ChessBoardController controller;
 	private final CheckMateController controller2;
 	
+	/**
+	 * Costruttore della classe.
+	 * 
+	 * @param model Il modello.
+	 * @param view La vista.
+	 * @param controller Il controllor che gestisce l'interazione vista-modello.
+	 * @param controller2 Il controller controlla la gestione dello scacco e dello scacco matto. 
+	 */
 	public Mover(Model model,View view,ChessBoardController controller, CheckMateController controller2) {
 		
 		this.model=model;
@@ -20,6 +34,14 @@ public class Mover {
 		
 	}
 	
+	/**
+	 * Gestisce il movimento dei pezzi sulla scacchiera, verificando se la mossa sia possibile.
+	 * Il metodo inoltre aggiunge un eventuale pezzo mangiato ad una lista.
+	 *  
+	 * @param from Posizione di partenza del pezzo.
+	 * @param coordinates Posizione di arrivo del pezzo.
+	 * @param o Il bottone con le coordinate di arrivo.
+	 */
 	public void moveAt(Position from,Position coordinates,Object o){
 		 if (isLegalMove(from,coordinates) ) {	 
 			 //se mangio un pezzo lo aggiungo alla lista dei mangiati
@@ -36,6 +58,13 @@ public class Mover {
 			 
 	}
 	
+	/**
+	 * Verifica se la mossa è corretta.
+	 * 
+	 * @param from Posizione di partenza del pezzo.
+	 * @param coordinates Posizione di arrivo del pezzo.
+	 * @return true se la mossa è corretta,false altrimenti.
+	 */
 	public boolean isLegalMove(Position from,Position coordinates){
 		
 		//La destinazione non contiene una pedina con colore uguale al turno
@@ -61,7 +90,11 @@ public class Mover {
 		 return false;
 	}
 	
-	//verifica se c'e un vincitore e ne ritorna il colore
+	/** Verifica se c'e un vincitore e ne ritorna il colore.
+	 * 
+	 * @param enemy Il pezzo che mette in scacco matto il re.
+	 * @return Il colore del vincitore.
+	 */
 	public Color therIsAWinner(Piece enemy){
 		
 		Color loser=model.getChessBoard().getTurn();
@@ -76,6 +109,13 @@ public class Mover {
 		return null;
 	}
 	
+	/**
+	 * Calcola se il percorso tra due pezzi è vuoto. 
+	 * 
+	 * @param from Coordinate iniziale del percorso.
+	 * @param to Coordinata finale del precorso.
+	 * @return true se il percorso è vuoto,fase altrimenti.
+	 */
 	public boolean freePath(Position from ,Position to){
 		
 		Position pos=new Position(to.x,to.y);
